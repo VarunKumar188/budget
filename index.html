@@ -3,1196 +3,1054 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PennyWise</title>
+    <title>AI Career Guide</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts - Inter (for a modern look), Montserrat (for headings) -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Google Fonts - Poppins (for general text), Playfair Display (for titles) -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    
     <style>
+        /* Custom CSS Variables for consistent theming */
+        :root {
+            --primary-color: #7F00FF; /* Electric Violet */
+            --secondary-color: #E100FF; /* Neon Pink */
+            --accent-color: #00DBDE; /* Aqua */
+            --text-color-light: #E0F7FA; /* Updated: Light cyan-tinted white for text on dark backgrounds */
+            --text-color-dark: #333333; /* Dark gray for text on light backgrounds */
+            --glass-bg-color: rgba(255, 255, 255, 0.1); /* Lighter glass background */
+            --glass-border-color: rgba(255, 255, 255, 0.3); /* Lighter glass border */
+            --glass-shadow-color: rgba(31, 38, 135, 0.4); /* Stronger shadow */
+
+            /* Updated main body gradient colors */
+            --body-gradient-start: #6A11CB; /* Deep Purple */
+            --body-gradient-mid: #2575FC;   /* Bright Blue */
+            --body-gradient-end: #00DBDE;   /* Aqua */
+        }
+
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden; /* Prevent horizontal scroll */
             min-height: 100vh;
-            overflow-x: hidden;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            background: linear-gradient(135deg, #1A202C, #2D3748, #4A5568); /* Dark to lighter gray gradient */
+            /* Updated background gradient for the main page with three colors */
+            background: linear-gradient(135deg, var(--body-gradient-start), var(--body-gradient-mid), var(--body-gradient-end));
+            background-size: 600% 600%; /* Increased size for more dynamic animation */
+            animation: gradientShift 20s ease infinite alternate; /* Slower, alternating animation */
+            color: var(--text-color-light); /* Default text color for body, updated */
+            scroll-behavior: smooth;
         }
-        .font-montserrat {
-            font-family: 'Montserrat', sans-serif;
+
+        /* Gradient Shift Animation */
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
-        .font-inter {
-            font-family: 'Inter', sans-serif;
+
+        /* Splash Screen Styles */
+        #splash-screen {
+            position: fixed;
+            inset: 0;
+            /* Updated splash screen background gradient */
+            background: linear-gradient(135deg, #00C6FF, #0072FF, #8E2DE2); /* Bright Sky Blue -> Deep Blue -> Rich Purple */
+            background-size: 400% 400%;
+            animation: gradientShift 18s ease infinite;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            z-index: 1000;
+            opacity: 1;
+            transition: opacity 1s ease-out;
+            overflow: hidden;
+            perspective: 1000px; /* For 3D transforms */
+        }
+
+        #splash-screen.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .splash-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 5rem; /* Larger */
+            font-weight: 900;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.9), 0 0 40px rgba(255, 255, 255, 0.7); /* Stronger glow */
+            /* Background gradient for splash screen title (remains white/light gray) */
+            background: linear-gradient(45deg, #FFFFFF, #F0F0F0, #E0E0E0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+            animation: splashTextAppear 1.5s ease-out forwards, splashTextPulse 2.5s ease-in-out infinite alternate;
+            transform: scale(0.8) translateY(-20px);
+            opacity: 0;
+            position: relative;
+            z-index: 20;
+        }
+
+        .splash-tagline {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            font-weight: 500;
+            color: #E0E7FF; /* Light blue-gray for tagline */
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.7); /* Stronger shadow */
+            opacity: 0;
+            transform: translateY(30px);
+            animation: taglineFadeIn 1s ease-out 1.8s forwards;
+            position: relative;
+            z-index: 20;
         }
 
         /* Splash Screen Animations */
-        @keyframes splash-pop-in {
-            0% { opacity: 0; transform: scale(0.8) translateY(20px); }
+        @keyframes splashTextAppear {
+            0% { opacity: 0; transform: scale(0.8) translateY(-20px); }
             100% { opacity: 1; transform: scale(1) translateY(0); }
         }
-        .animate-splash-pop-in {
-            animation: splash-pop-in 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+
+        @keyframes splashTextPulse {
+            0%, 100% { text-shadow: 0 0 20px rgba(255, 255, 255, 0.9), 0 0 40px rgba(255, 255, 255, 0.7); }
+            50% { text-shadow: 0 0 25px rgba(255, 255, 255, 1), 0 0 50px rgba(255, 255, 255, 0.9); }
         }
 
-        @keyframes splash-fade-in {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
-        }
-        .animate-splash-fade-in {
-            animation: splash-fade-in 1s ease-in forwards;
-            animation-delay: 0.5s;
-        }
-
-        /* General UI animations */
-        @keyframes fade-in {
-            0% { opacity: 0; transform: translateY(10px); }
+        @keyframes taglineFadeIn {
+            0% { opacity: 0; transform: translateY(30px); }
             100% { opacity: 1; transform: translateY(0); }
         }
-        .animate-fade-in {
-            animation: fade-in 0.5s ease-out forwards;
+
+        /* Parallax elements */
+        .parallax-element {
+            will-change: transform;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            opacity: 0;
+            animation: fadeInScale 2s ease-out forwards;
         }
 
-        /* Modal Overlay */
+        .parallax-element.layer-1 {
+            width: 100vmin;
+            height: 100vmin;
+            animation-delay: 0.2s;
+            z-index: 1;
+        }
+        .parallax-element.layer-2 {
+            width: 80vmin;
+            height: 80vmin;
+            animation-delay: 0.4s;
+            z-index: 2;
+        }
+        .parallax-element.layer-3 {
+            width: 60vmin;
+            height: 60vmin;
+            animation-delay: 0.6s;
+            z-index: 3;
+        }
+
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
+            to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+
+        /* Main App Container */
+        #main-app {
+            min-height: 100vh;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0; /* Start hidden */
+            transition: opacity 1s ease-in;
+        }
+
+        #main-app.show {
+            opacity: 1;
+        }
+
+        .glass-container {
+            background: var(--glass-bg-color);
+            backdrop-filter: blur(15px); /* Increased blur */
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border-color);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px 0 var(--glass-shadow-color); /* Stronger shadow */
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 900px;
+            color: var(--text-color-light); /* Text color inside glass container, updated */
+            animation: slideInUp 0.8s ease-out forwards;
+            position: relative; /* For z-index of loading spinner */
+        }
+
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-color-light); /* Light color for labels */
+        }
+
+        textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background-color: rgba(255, 255, 255, 0.15); /* Slightly more opaque */
+            color: white;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 100px;
+            transition: all 0.3s ease;
+        }
+
+        textarea::placeholder {
+            color: rgba(255, 255, 255, 0.9); /* More visible placeholder, updated */
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 4px rgba(0, 219, 222, 0.5); /* Aqua shadow */
+            background-color: rgba(255, 255, 255, 0.25); /* Even more opaque on focus */
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.8rem 1.8rem;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(45deg, #6A00CC, #D000E0); /* Darker shades on hover */
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Tab Buttons */
+        .tab-button-group {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .tab-button {
+            padding: 0.7rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-color-light); /* Light color for tab buttons */
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .tab-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .tab-button.active {
+            background: linear-gradient(45deg, var(--accent-color), #00F2FE); /* Aqua to brighter Cyan */
+            border-color: var(--accent-color);
+            transform: scale(1.02);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            color: var(--text-color-dark); /* Dark text on bright active tab */
+        }
+
+
+        /* Loading Spinner */
+        .loading-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 20px;
+            z-index: 50;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 500;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .loading-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Results Section */
+        #aiResultsContainer, #famousCareersContainer { /* Apply to both result containers */
+            margin-top: 2rem;
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .career-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px); /* Slightly more blur for cards */
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.25); /* Stronger border */
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3); /* Deeper shadow */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 200px; /* Ensure consistent card height */
+        }
+
+        .career-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .career-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: #00FFD7; /* Bright Cyan for card titles */
+            text-shadow: 1px 1px 5px rgba(0,0,0,0.5); /* Stronger shadow */
+        }
+
+        .career-card p {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: var(--text-color-light); /* Light text for card descriptions, updated */
+            margin-bottom: 1rem;
+            flex-grow: 1;
+        }
+
+        .career-card .view-details-btn {
+            background: linear-gradient(45deg, #E100FF, #7F00FF); /* Neon Pink to Electric Violet */
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-top: 1rem; /* Space from description */
+            align-self: flex-end; /* Push to bottom right */
+        }
+
+        .career-card .view-details-btn:hover {
+            background: linear-gradient(45deg, #C000E0, #6A00CC); /* Darker shades on hover */
+            transform: translateY(-2px);
+        }
+
+        /* Modal Styles */
         .modal-overlay {
-            background-color: rgba(0, 0, 0, 0.7);
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8); /* Darker overlay */
+            backdrop-filter: blur(15px); /* Increased blur */
+            -webkit-backdrop-filter: blur(15px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             z-index: 1000;
-        }
-        .modal-content {
-            animation: fade-in 0.3s ease-out forwards;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
         }
 
-        /* Custom class to hide elements */
-        .app-hidden {
-            display: none !important;
+        .modal-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(245, 245, 245, 0.98)); /* Very light, almost opaque */
+            border-radius: 20px;
+            padding: 2.5rem;
+            width: 90%;
+            max-width: 700px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5); /* Stronger shadow */
+            position: relative;
+            transform: scale(0.9);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            color: var(--text-color-dark); /* Dark text on light modal background */
+            max-height: 90vh; /* Limit height for scrollability */
+            overflow-y: auto; /* Enable scrolling for modal content */
+        }
+
+        .modal-overlay.show .modal-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            color: #666;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .modal-close-btn:hover {
+            color: #333;
+        }
+
+        .modal-content h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: var(--primary-color); /* Electric Violet for modal titles */
+            margin-bottom: 1rem;
+        }
+
+        .modal-content p, .modal-content ul {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #555;
+            margin-bottom: 1rem;
+        }
+
+        .modal-content ul {
+            list-style: disc;
+            padding-left: 1.5rem;
+        }
+
+        .modal-content strong {
+            color: var(--secondary-color); /* Neon Pink for strong text in modal */
+        }
+
+        /* Popup Message Box */
+        #popup-container {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1001;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .popup-message {
+            background-color: #4CAF50; /* Green for success */
+            color: white;
+            padding: 12px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+            font-weight: 500;
+            transform: translateY(20px);
+        }
+
+        .popup-message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .popup-message.error {
+            background-color: #F44336; /* Red for error */
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .splash-title {
+                font-size: 3rem;
+            }
+            .splash-tagline {
+                font-size: 1.2rem;
+            }
+            .glass-container {
+                padding: 1.5rem;
+            }
+            .btn {
+                font-size: 1rem;
+                padding: 0.7rem 1.5rem;
+            }
+            .career-card h3 {
+                font-size: 1.5rem;
+            }
+            .modal-content {
+                padding: 1.5rem;
+            }
+            .modal-content h3 {
+                font-size: 1.8rem;
+            }
         }
     </style>
 </head>
-<body>
+<body class="min-h-screen">
     <!-- Splash Screen -->
-    <div id="splash-screen" class="fixed inset-0 bg-gradient-to-br from-indigo-900 to-blue-900 flex flex-col items-center justify-center text-white z-50 transition-opacity duration-700 ease-out opacity-100">
-        <div class="text-6xl md:text-8xl mb-6 text-yellow-400 animate-splash-pop-in">
-            <i class="fas fa-piggy-bank"></i>
+    <div id="splash-screen">
+        <!-- Parallax background elements -->
+        <div class="parallax-element layer-1" data-depth="0.1">
+            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="2">
+                <circle cx="100" cy="100" r="90"/>
+                <path d="M100 10 L190 100 L100 190 L10 100 Z"/>
+            </svg>
         </div>
-        <h1 class="text-7xl md:text-8xl font-extrabold mb-4 drop-shadow-lg tracking-wider animate-splash-pop-in font-montserrat" style="animation-delay: 0.2s;">
-            PennyWise
-        </h1>
-        <p class="text-3xl md:text-4xl font-semibold text-blue-200 animate-splash-fade-in font-inter" style="animation-delay: 0.7s;">
-            Smart Budget. Brighter Future.
-        </p>
+        <div class="parallax-element layer-2" data-depth="0.2">
+            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="2">
+                <rect x="20" y="20" width="160" height="160" rx="20"/>
+                <line x1="20" y1="100" x2="180" y2="100"/>
+                <line x1="100" y1="20" x2="100" y2="180"/>
+            </svg>
+        </div>
+        <div class="parallax-element layer-3" data-depth="0.3">
+            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="2">
+                <polygon points="100,10 160,50 160,150 100,190 40,150 40,50"/>
+            </svg>
+        </div>
+
+        <h1 class="splash-title">Career Compass</h1>
+        <p class="splash-tagline">Navigate Your Future with AI</p>
     </div>
 
-    <!-- Main Application Content -->
-    <div id="app-root" class="min-h-screen bg-gray-900 text-gray-100 flex flex-col items-center p-4 relative overflow-x-hidden app-hidden">
-        <!-- Background subtle pattern/gradient -->
-        <div class="absolute inset-0 bg-gradient-to-br from-gray-800 via-gray-900 to-gray-800 opacity-70 z-0"></div>
-
-        <!-- Top Navigation Bar -->
-        <nav class="w-full bg-gray-800 bg-opacity-70 backdrop-blur-md p-4 shadow-xl fixed top-0 left-0 z-20 flex justify-center items-center rounded-b-lg border-b border-gray-700">
-            <div class="flex space-x-6">
-                <button id="dashboard-tab" class="py-3 px-8 rounded-full text-lg font-bold transition-all duration-300 ease-in-out transform shadow-lg bg-green-600 text-white hover:bg-green-700 hover:scale-105">
-                    <i class="fas fa-chart-line mr-2"></i>Dashboard
-                </button>
-                <button id="insights-tab" class="py-3 px-8 rounded-full text-lg font-bold transition-all duration-300 ease-in-out transform shadow-lg bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-white">
-                    <i class="fas fa-lightbulb mr-2"></i>Insights
-                </button>
-                <button id="goals-tab" class="py-3 px-8 rounded-full text-lg font-bold transition-all duration-300 ease-in-out transform shadow-lg bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-white">
-                    <i class="fas fa-bullseye mr-2"></i>Goals
-                </button>
-                <button id="settings-tab" class="py-3 px-8 rounded-full text-lg font-bold transition-all duration-300 ease-in-out transform shadow-lg bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-white">
-                    <i class="fas fa-cog mr-2"></i>Settings
-                </button>
-            </div>
-        </nav>
-
-        <header id="app-header" class="w-full max-w-6xl text-center text-white mb-8 flex flex-col items-center justify-center relative z-10 pt-24 animate-fade-in">
-            <h1 class="text-5xl md:text-6xl font-extrabold drop-shadow-lg tracking-wide font-montserrat text-green-400">
-                PennyWise
-            </h1>
-            <p class="text-xl md:text-2xl mt-4 text-blue-200 font-light leading-relaxed font-inter">
-                Your Smart Budget. For a Brighter Future.
+    <!-- Main Application Container -->
+    <div id="main-app" class="hidden">
+        <div class="glass-container">
+            <h2 class="text-3xl md:text-4xl font-extrabold text-center mb-6 font-playfair-display text-white drop-shadow-lg">
+                Your AI Career Guide
+            </h2>
+            <p class="text-center text-lg mb-8 text-blue-100">
+                Explore career paths with AI or browse some popular options.
             </p>
-        </header>
 
-        <!-- Main Content Area -->
-        <main class="w-full max-w-4xl relative z-10 p-4">
-            <!-- Dashboard View -->
-            <section id="dashboard-view" class="bg-gray-800 bg-opacity-70 backdrop-blur-xl rounded-3xl shadow-2xl p-8 mb-12 animate-fade-in border border-gray-700">
-                <h2 class="text-4xl font-extrabold text-center mb-8 text-green-300 font-montserrat">
-                    Your Financial Snapshot
-                </h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                    <div class="bg-gray-700 p-6 rounded-2xl shadow-lg border border-gray-600">
-                        <h3 class="text-xl font-semibold text-blue-300 mb-2 font-inter">Current Balance</h3>
-                        <p class="text-5xl font-bold text-white font-montserrat" id="current-balance">$0.00</p>
-                    </div>
-                    <div class="bg-gray-700 p-6 rounded-2xl shadow-lg border border-gray-600">
-                        <h3 class="text-xl font-semibold text-red-300 mb-2 font-inter">Monthly Expenses</h3>
-                        <p class="text-5xl font-bold text-white font-montserrat" id="monthly-expenses">$0.00</p>
-                    </div>
-                </div>
-
-                <div class="mb-8">
-                    <h3 class="text-2xl font-semibold text-green-300 mb-4 font-montserrat">Spending by Category (Monthly)</h3>
-                    <div id="category-spending-summary" class="space-y-4">
-                        <!-- Category spending summaries will be injected here -->
-                        <p class="text-gray-400 text-center font-inter" id="no-category-spending">No expenses recorded yet.</p>
-                    </div>
-                </div>
-
-                <div class="mb-8">
-                    <h3 class="text-2xl font-semibold text-green-300 mb-4 font-montserrat">Recent Transactions</h3>
-                    <ul id="recent-transactions-list" class="space-y-3">
-                        <!-- Recent transactions will be injected here -->
-                        <p class="text-gray-400 text-center font-inter" id="no-transactions">No transactions recorded yet.</p>
-                    </ul>
-                </div>
-
-                <button id="add-expense-btn" class="w-full py-4 rounded-xl text-xl font-bold bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-2xl font-montserrat">
-                    <i class="fas fa-plus-circle mr-2"></i>Add New Expense
+            <div class="tab-button-group">
+                <button id="tabAiGuide" class="tab-button active">
+                    <i class="fas fa-brain mr-2"></i> AI Career Guide
                 </button>
-            </section>
-
-            <!-- Insights View (hidden by default) -->
-            <section id="insights-view" class="bg-gray-800 bg-opacity-70 backdrop-blur-xl rounded-3xl shadow-2xl p-8 mb-12 animate-fade-in border border-gray-700 hidden">
-                <h2 class="text-4xl font-extrabold text-center mb-8 text-yellow-300 font-montserrat">
-                    Smart Savings Insights
-                </h2>
-                <p class="text-center text-lg md:text-xl mb-8 text-gray-300 font-inter">
-                    Get personalized recommendations to optimize your spending and boost your savings.
-                </p>
-
-                <div id="insights-container" class="space-y-6 mb-8">
-                    <!-- Insights will be injected here -->
-                    <div class="bg-gray-700 p-6 rounded-2xl shadow-lg border border-gray-600 animate-fade-in">
-                        <h3 class="text-xl font-semibold text-yellow-200 mb-2 font-inter">Welcome Insight!</h3>
-                        <p class="text-gray-200 font-inter">Start by adding your income and expenses to get personalized insights tailored to your financial habits.</p>
-                    </div>
-                </div>
-
-                <button id="generate-insights-btn" class="w-full py-4 rounded-xl text-xl font-bold bg-gradient-to-r from-purple-500 to-pink-600 text-white shadow-lg hover:from-purple-600 hover:to-pink-700 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-2xl font-montserrat">
-                    <i class="fas fa-magic mr-2"></i>Generate More Insights
+                <button id="tabFamousCareers" class="tab-button">
+                    <i class="fas fa-star mr-2"></i> Famous Careers
                 </button>
-                <div id="insights-loading" class="flex justify-center items-center mt-4 space-x-3 hidden">
-                    <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-8 w-8 border-t-purple-500"></div>
-                    <p class="text-gray-400 font-inter">Brewing new financial wisdom...</p>
-                </div>
-            </section>
+            </div>
 
-            <!-- Goals View (hidden by default) -->
-            <section id="goals-view" class="bg-gray-800 bg-opacity-70 backdrop-blur-xl rounded-3xl shadow-2xl p-8 mb-12 animate-fade-in border border-gray-700 hidden">
-                <h2 class="text-4xl font-extrabold text-center mb-8 text-blue-300 font-montserrat">
-                    Your Financial Goals
-                </h2>
-                <p class="text-center text-lg md:text-xl mb-8 text-gray-300 font-inter">
-                    Set your financial targets and track your progress towards a brighter future.
-                </p>
-
-                <div id="goals-list" class="space-y-6 mb-8">
-                    <!-- Goals will be injected here -->
-                    <p class="text-gray-400 text-center font-inter" id="no-goals">No goals set yet. Add your first goal below!</p>
+            <!-- AI Career Guide Tab Content -->
+            <div id="aiGuideContent" class="tab-content">
+                <div class="form-group">
+                    <label for="userInput">Describe your interests, skills, education, and what you're looking for:</label>
+                    <textarea
+                        id="userInput"
+                        placeholder="E.g., 'I enjoy problem-solving, have strong analytical skills, a degree in computer science, and am interested in tech roles. I want a career with good growth potential.' Or 'I love helping people, have good communication skills, and a high school diploma. I'm looking for a job that makes a difference.'"
+                    ></textarea>
                 </div>
 
-                <div class="bg-gray-700 p-6 rounded-2xl shadow-lg border border-gray-600">
-                    <h3 class="text-2xl font-semibold text-blue-300 mb-4 font-montserrat">Add New Goal</h3>
-                    <div class="mb-4">
-                        <label for="goal-name" class="block text-gray-300 text-lg font-inter mb-2">Goal Name:</label>
-                        <input type="text" id="goal-name" class="w-full p-3 rounded-lg bg-gray-800 border border-gray-600 text-white placeholder-gray-500 font-inter" placeholder="e.g., Vacation to Bali">
-                    </div>
-                    <div class="mb-6">
-                        <label for="goal-amount" class="block text-gray-300 text-lg font-inter mb-2">Target Amount ($):</label>
-                        <input type="number" id="goal-amount" class="w-full p-3 rounded-lg bg-gray-800 border border-gray-600 text-white placeholder-gray-500 font-inter" placeholder="e.g., 5000">
-                    </div>
-                    <button id="add-goal-btn" class="w-full py-4 rounded-xl text-xl font-bold bg-gradient-to-r from-teal-500 to-green-600 text-white shadow-lg hover:from-teal-600 hover:to-green-700 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-2xl font-montserrat">
-                        <i class="fas fa-plus mr-2"></i>Add Goal
+                <div class="text-center">
+                    <button id="recommendButton" class="btn btn-primary">
+                        <i class="fas fa-robot"></i> Get Career Recommendations
                     </button>
                 </div>
 
-                <!-- Goal Recommendations Section -->
-                <div id="goal-recommendations-section" class="mt-8 p-6 bg-gray-700 rounded-3xl shadow-2xl border border-blue-600 hidden animate-fade-in">
-                    <h3 class="text-3xl font-extrabold text-center mb-6 text-orange-300 font-montserrat" id="goal-recommendations-title">
-                        Recommendations for Your Goal
-                    </h3>
-                    <div id="goal-recommendations-list" class="space-y-4">
-                        <!-- Recommendations will be injected here -->
-                    </div>
-                    <button id="close-recommendations-btn" class="mt-6 w-full py-3 rounded-xl text-lg font-bold bg-gradient-to-r from-red-500 to-orange-500 text-white shadow-lg hover:from-red-600 hover:to-orange-600 transition-all duration-300 ease-in-out transform hover:-translate-y-1 font-montserrat">
-                        Close Recommendations
-                    </button>
+                <div id="loading-overlay" class="loading-overlay">
+                    <div class="spinner"></div>
+                    <p>Generating recommendations...</p>
                 </div>
-            </section>
 
-             <!-- Settings View (hidden by default) -->
-            <section id="settings-view" class="bg-gray-800 bg-opacity-70 backdrop-blur-xl rounded-3xl shadow-2xl p-8 mb-12 animate-fade-in border border-gray-700 hidden">
-                <h2 class="text-4xl font-extrabold text-center mb-8 text-purple-300 font-montserrat">
-                    App Settings
-                </h2>
-                <p class="text-center text-lg md:text-xl mb-8 text-gray-300 font-inter">
-                    Customize your PennyWise experience.
+                <div id="aiResultsContainer" class="mt-8 w-full max-w-7xl">
+                    <!-- AI-generated career cards will be rendered here -->
+                </div>
+            </div>
+
+            <!-- Famous Careers Tab Content -->
+            <div id="famousCareersContent" class="tab-content hidden">
+                <h3 class="text-2xl md:text-3xl font-extrabold text-center mb-6 font-playfair-display text-white drop-shadow-lg">
+                    Popular Career Paths
+                </h3>
+                <p class="text-center text-lg mb-8 text-blue-100">
+                    Explore some commonly sought-after and impactful careers.
                 </p>
-
-                <div class="space-y-6">
-                    <div class="bg-gray-700 p-6 rounded-2xl shadow-lg border border-gray-600">
-                        <h3 class="text-2xl font-semibold text-purple-200 mb-4 font-inter">Update Bank Balance</h3>
-                        <div class="mb-4">
-                            <label for="manual-balance-input" class="block text-gray-300 text-lg font-inter mb-2">Enter Current Balance ($):</label>
-                            <input type="number" id="manual-balance-input" class="w-full p-3 rounded-lg bg-gray-800 border border-gray-600 text-white placeholder-gray-500 font-inter" placeholder="e.g., 5000.00">
-                        </div>
-                        <button id="update-balance-btn" class="w-full py-3 rounded-xl text-xl font-bold bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-2xl font-montserrat">
-                            <i class="fas fa-sync-alt mr-2"></i>Update Balance
-                        </button>
-                    </div>
-
-                    <div class="bg-gray-700 p-6 rounded-2xl shadow-lg border border-gray-600">
-                        <h3 class="text-2xl font-semibold text-purple-200 mb-4 font-inter">Manage Categories</h3>
-                        <ul id="category-list" class="space-y-3 mb-4">
-                            <!-- Categories will be listed here -->
-                        </ul>
-                        <div class="flex gap-2">
-                            <input type="text" id="new-category-input" class="flex-grow p-3 rounded-lg bg-gray-800 border border-gray-600 text-white placeholder-gray-500 font-inter" placeholder="New Category Name">
-                            <button id="add-category-btn" class="p-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-bold">Add</button>
-                        </div>
-                    </div>
-
-                    <div class="bg-gray-700 p-6 rounded-2xl shadow-lg border border-gray-600">
-                        <h3 class="text-2xl font-semibold text-purple-200 mb-4 font-inter">Set Monthly Budgets</h3>
-                        <div id="budget-limits-container" class="space-y-4">
-                             <!-- Budget limits will be listed here -->
-                             <p class="text-gray-400 text-center font-inter" id="no-budgets-set">No categories with budgets set yet. Add categories above first.</p>
-                        </div>
-                        <button id="save-budgets-btn" class="mt-6 w-full py-3 rounded-xl text-xl font-bold bg-gradient-to-r from-green-500 to-teal-600 text-white shadow-lg hover:from-green-600 hover:to-teal-700 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-2xl font-montserrat">
-                            Save Budgets
-                        </button>
-                    </div>
-
-                    <div class="bg-gray-700 p-6 rounded-2xl shadow-lg border border-gray-600">
-                        <h3 class="text-2xl font-semibold text-purple-200 mb-4 font-inter">Reset App Data</h3>
-                        <p class="text-gray-300 mb-4 font-inter">Warning: This will clear all your expenses, goals, and categories!</p>
-                        <button id="reset-app-btn" class="w-full py-3 rounded-xl text-xl font-bold bg-gradient-to-r from-red-600 to-red-700 text-white shadow-lg hover:from-red-700 hover:to-red-800 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-2xl font-montserrat">
-                            <i class="fas fa-exclamation-triangle mr-2"></i>Reset All Data
-                        </button>
-                    </div>
+                <div id="famousCareersContainer" class="mt-8 w-full max-w-7xl grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
+                    <!-- Famous career cards will be rendered here -->
                 </div>
-            </section>
-        </main>
-    </div>
-
-    <!-- Add Expense Modal -->
-    <div id="add-expense-modal" class="fixed inset-0 modal-overlay flex items-center justify-center p-4 hidden">
-        <div class="bg-gray-800 p-8 rounded-3xl shadow-2xl modal-content w-full max-w-md border border-gray-700">
-            <h2 class="text-3xl font-bold text-center mb-6 text-green-300 font-montserrat">Add New Expense</h2>
-            <div class="mb-4">
-                <label for="expense-description" class="block text-gray-300 text-lg font-inter mb-2">Description:</label>
-                <input type="text" id="expense-description" class="w-full p-3 rounded-lg bg-gray-700 border border-gray-600 text-white placeholder-gray-500 font-inter" placeholder="e.g., Coffee at Cafe X">
-            </div>
-            <div class="mb-4">
-                <label for="expense-amount" class="block text-gray-300 text-lg font-inter mb-2">Amount ($):</label>
-                <input type="number" id="expense-amount" class="w-full p-3 rounded-lg bg-gray-700 border border-gray-600 text-white placeholder-gray-500 font-inter" placeholder="e.g., 5.50">
-            </div>
-            <div class="mb-4">
-                <label for="expense-category" class="block text-gray-300 text-lg font-inter mb-2">Category:</label>
-                <select id="expense-category" class="w-full p-3 rounded-lg bg-gray-700 border border-gray-600 text-white font-inter">
-                    <!-- Categories will be dynamically loaded here -->
-                </select>
-            </div>
-            <div class="mb-6">
-                <label for="expense-date" class="block text-gray-300 text-lg font-inter mb-2">Date:</label>
-                <input type="date" id="expense-date" class="w-full p-3 rounded-lg bg-gray-700 border border-gray-600 text-white font-inter">
-            </div>
-            <div class="flex justify-end gap-4">
-                <button id="cancel-expense-btn" class="py-3 px-6 rounded-lg bg-gray-600 text-white font-bold hover:bg-gray-700 transition-colors font-montserrat">Cancel</button>
-                <button id="save-expense-btn" class="py-3 px-6 rounded-lg bg-green-600 text-white font-bold hover:bg-green-700 transition-colors font-montserrat">Add Expense</button>
             </div>
         </div>
     </div>
 
+    <!-- Modal for Career Details -->
+    <div id="careerDetailModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close-btn" id="modalCloseButton">&times;</button>
+            <h3 id="modalCareerName"></h3>
+            <p><strong>Description:</strong> <span id="modalDescription"></span></p>
+            <p><strong>Key Skills:</strong> <ul id="modalKeySkills" class="list-disc list-inside"></ul></p>
+            <p><strong>Education Required:</strong> <span id="modalEducationRequired"></span></p>
+            <p><strong>Job Outlook:</strong> <span id="modalJobOutlook"></span></p>
+        </div>
+    </div>
+
+    <!-- Popup Message Container -->
+    <div id="popup-container"></div>
 
     <script>
-        // --- Global State ---
-        let appState = {
-            currentView: 'dashboard', // 'dashboard', 'insights', 'goals', 'settings'
-            currentBalance: 5000.00, // Initial balance
-            expenses: [], // { id, description, amount, category, date }
-            goals: [], // { id, name, target, saved }
-            categories: ['Groceries', 'Utilities', 'Rent', 'Transport', 'Entertainment', 'Dining Out', 'Shopping', 'Health', 'Education', 'Salary'],
-            budgetLimits: {
-                // categoryName: limitAmount
-                'Groceries': 400,
-                'Utilities': 150,
-                'Rent': 1000,
-                'Transport': 100,
-                'Entertainment': 80,
-                'Dining Out': 120,
-                'Shopping': 200,
-                'Health': 50,
-                'Education': 30,
-            },
-            loadingInsights: false,
-            selectedGoalForRecommendations: null, // New: Tracks which goal's recommendations are shown
-            // Dummy insights, to be replaced by AI generation or more complex logic
-            generalInsights: [ // Renamed from dummyInsights
-                (spending) => `You've spent $${spending['Dining Out'] ? spending['Dining Out'].toFixed(2) : '0.00'} on dining out this month. Consider cooking at home more often to save an estimated $50-$100!`,
-                (spending) => `Your entertainment spending is $${spending['Entertainment'] ? spending['Entertainment'].toFixed(2) : '0.00'}. Try free activities or look for discounts to stay within your budget.`,
-                (spending) => `Great job managing your rent! It's a significant expense, and keeping it stable is key to financial health.`,
-                (spending) => `Your transport costs ($${spending['Transport'] ? spending['Transport'].toFixed(2) : '0.00'}) seem manageable. Exploring public transport or cycling could offer further savings.`,
-                (spending) => `Groceries are at $${spending['Groceries'] ? spending['Groceries'].toFixed(2) : '0.00'}. Planning your meals and making a list before shopping can help reduce impulse buys and waste.`,
-                (spending) => `You're doing well with your budget overall! Keep tracking your expenses diligently for continued financial clarity.`,
-                (spending) => `Review your monthly subscriptions. Even small forgotten payments can add up to significant savings over time.`,
-                (spending) => `Look for ways to optimize your utility usage. Small changes like turning off lights or unplugging electronics can lower your bills.`,
-                (spending) => `Consider setting up automated transfers to your savings goals. 'Set it and forget it' is a powerful savings strategy.`,
-                (spending) => `Your income is strong! Think about increasing your contributions to long-term investments or retirement funds.`
-            ],
-            // New: Dummy functions for goal-specific insights
-            goalInsightsGenerator: [
-                (goal, spending) => {
-                    const remaining = goal.target - goal.saved;
-                    if (remaining > 0) {
-                        return `To reach your '${goal.name}' goal of $${goal.target.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (need $${remaining.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}), identify your top 3 spending categories and aim to reduce each by 10% this month.`;
-                    }
-                    return null;
-                },
-                (goal, spending) => {
-                    const diningOutSpent = spending['Dining Out'] || 0;
-                    if (diningOutSpent > 50) {
-                        return `For your '${goal.name}' goal, cutting back on dining out could make a huge difference. You've spent $${diningOutSpent.toFixed(2)} on dining out this month. Try reducing it by 25% to save over $${(diningOutSpent * 0.25).toFixed(2)} towards your goal.`;
-                    }
-                    return null;
-                },
-                (goal, spending) => {
-                    const shoppingSpent = spending['Shopping'] || 0;
-                    if (shoppingSpent > 100) {
-                        return `Consider a 'no-spend' week or month for non-essential shopping to accelerate your '${goal.name}' savings. You spent $${shoppingSpent.toFixed(2)} on shopping this month.`;
-                    }
-                    return null;
-                },
-                (goal, spending) => {
-                    const remaining = goal.target - goal.saved;
-                    const monthlySaveNeeded = remaining / 12; // To reach in 1 year
-                    if (monthlySaveNeeded > 0) {
-                        return `If you aim to save for '${goal.name}' over the next year, try to put aside at least $${monthlySaveNeeded.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} per month. Automate this transfer!`;
-                    }
-                    return null;
-                },
-                (goal, spending) => {
-                    if (goal.target > 2000) { // Larger goals
-                        return `For a big goal like '${goal.name}', explore side hustles or selling unused items. Extra income can dramatically boost your progress.`;
-                    }
-                    return null;
-                },
-                (goal, spending) => {
-                    return `Review your current budget limits in the Settings tab. Can you slightly decrease limits in non-essential categories to free up funds for '${goal.name}'?`;
-                },
-                (goal, spending) => {
-                    return `Track every small expense for a week. You might be surprised where little amounts go, and these can be redirected to your '${goal.name}' goal.`;
-                }
-            ]
-        };
+        // Global variables for app state
+        let userInput = '';
+        let recommendedCareers = []; // For AI-generated careers
+        let selectedCareer = null;
+        let isLoading = false;
+        let currentView = 'ai-guide'; // 'ai-guide' or 'famous-careers'
 
-        // --- DOM Elements Cache ---
-        const DOMElements = {
-            splashScreen: document.getElementById('splash-screen'),
-            appRoot: document.getElementById('app-root'),
-            dashboardTab: document.getElementById('dashboard-tab'),
-            insightsTab: document.getElementById('insights-tab'),
-            goalsTab: document.getElementById('goals-tab'),
-            settingsTab: document.getElementById('settings-tab'), 
-            dashboardView: document.getElementById('dashboard-view'),
-            insightsView: document.getElementById('insights-view'),
-            goalsView: document.getElementById('goals-view'),
-            settingsView: document.getElementById('settings-view'), 
-            currentBalanceDisplay: document.getElementById('current-balance'),
-            monthlyExpensesDisplay: document.getElementById('monthly-expenses'),
-            categorySpendingSummary: document.getElementById('category-spending-summary'),
-            noCategorySpending: document.getElementById('no-category-spending'),
-            recentTransactionsList: document.getElementById('recent-transactions-list'),
-            noTransactions: document.getElementById('no-transactions'),
-            addExpenseBtn: document.getElementById('add-expense-btn'),
-            insightsContainer: document.getElementById('insights-container'),
-            generateInsightsBtn: document.getElementById('generate-insights-btn'),
-            insightsLoading: document.getElementById('insights-loading'),
-            goalsList: document.getElementById('goals-list'),
-            noGoals: document.getElementById('no-goals'),
-            goalNameInput: document.getElementById('goal-name'),
-            goalAmountInput: document.getElementById('goal-amount'),
-            addGoalBtn: document.getElementById('add-goal-btn'),
-            goalRecommendationsSection: document.getElementById('goal-recommendations-section'), // New
-            goalRecommendationsTitle: document.getElementById('goal-recommendations-title'), // New
-            goalRecommendationsList: document.getElementById('goal-recommendations-list'), // New
-            closeRecommendationsBtn: document.getElementById('close-recommendations-btn'), // New
-            addExpenseModal: document.getElementById('add-expense-modal'),
-            expenseDescriptionInput: document.getElementById('expense-description'),
-            expenseAmountInput: document.getElementById('expense-amount'),
-            expenseCategorySelect: document.getElementById('expense-category'),
-            expenseDateInput: document.getElementById('expense-date'),
-            cancelExpenseBtn: document.getElementById('cancel-expense-btn'),
-            saveExpenseBtn: document.getElementById('save-expense-btn'),
-            manualBalanceInput: document.getElementById('manual-balance-input'), 
-            updateBalanceBtn: document.getElementById('update-balance-btn'), 
-            categoryList: document.getElementById('category-list'), 
-            newCategoryInput: document.getElementById('new-category-input'), 
-            addCategoryBtn: document.getElementById('add-category-btn'), 
-            budgetLimitsContainer: document.getElementById('budget-limits-container'), 
-            noBudgetsSet: document.getElementById('no-budgets-set'), 
-            saveBudgetsBtn: document.getElementById('save-budgets-btn'), 
-            resetAppBtn: document.getElementById('reset-app-btn'), 
-        };
+        // API Key for Gemini API (leave empty, Canvas will provide)
+        const API_KEY = "";
+
+        // --- Famous Careers Data ---
+        const famousCareersData = [
+            {
+                careerName: "Software Engineer",
+                description: "Designs, develops, and maintains software applications. Involves coding, testing, and debugging to create functional and efficient programs.",
+                keySkills: ["Programming (Python, Java, C++)", "Problem-solving", "Data Structures & Algorithms", "Version Control (Git)", "Debugging"],
+                educationRequired: "Bachelor's Degree in Computer Science or related field",
+                jobOutlook: "Excellent"
+            },
+            {
+                careerName: "Data Scientist",
+                description: "Analyzes complex data to extract insights and knowledge. Uses statistical methods, machine learning, and programming to solve business problems and predict trends.",
+                keySkills: ["Statistical Analysis", "Machine Learning", "Python/R", "SQL", "Data Visualization"],
+                educationRequired: "Master's Degree in Data Science, Statistics, or Computer Science",
+                jobOutlook: "Excellent"
+            },
+            {
+                careerName: "Digital Marketing Specialist",
+                description: "Develops and implements online marketing strategies to promote products or services. Focuses on SEO, social media, content marketing, and analytics.",
+                keySkills: ["SEO/SEM", "Content Marketing", "Social Media Management", "Analytics", "Communication"],
+                educationRequired: "Bachelor's Degree in Marketing, Communications, or related field",
+                jobOutlook: "Good"
+            },
+            {
+                careerName: "Registered Nurse (RN)",
+                description: "Provides direct patient care, administers medications, educates patients and families, and collaborates with healthcare teams. Works in hospitals, clinics, and other healthcare settings.",
+                keySkills: ["Patient Care", "Critical Thinking", "Communication", "Empathy", "Medical Knowledge"],
+                educationRequired: "Associate's Degree in Nursing (ADN) or Bachelor of Science in Nursing (BSN)",
+                jobOutlook: "Excellent"
+            },
+            {
+                careerName: "Graphic Designer",
+                description: "Creates visual concepts using computer software or by hand, to communicate ideas that inspire, inform, or captivate consumers. Works on logos, websites, advertisements, and more.",
+                keySkills: ["Adobe Creative Suite", "Typography", "Color Theory", "Creativity", "Attention to Detail"],
+                educationRequired: "Bachelor's Degree in Graphic Design or related field",
+                jobOutlook: "Average"
+            },
+            {
+                careerName: "Financial Analyst",
+                description: "Evaluates financial data to help businesses make informed decisions. Conducts research, analyzes trends, and prepares reports on investments and financial performance.",
+                keySkills: ["Financial Modeling", "Data Analysis", "Excel", "Communication", "Attention to Detail"],
+                educationRequired: "Bachelor's Degree in Finance, Economics, or Accounting",
+                jobOutlook: "Good"
+            }
+        ];
+
+
+        // --- DOM Elements (cached for efficiency) ---
+        const splashScreen = document.getElementById('splash-screen');
+        const mainApp = document.getElementById('main-app');
+        const userInputTextarea = document.getElementById('userInput');
+        const recommendButton = document.getElementById('recommendButton');
+        const loadingOverlay = document.getElementById('loading-overlay');
+        const aiResultsContainer = document.getElementById('aiResultsContainer'); // Specific for AI results
+        const famousCareersContainer = document.getElementById('famousCareersContainer'); // Specific for Famous Careers
+        const careerDetailModal = document.getElementById('careerDetailModal');
+        const modalCloseButton = document.getElementById('modalCloseButton');
+        const modalCareerName = document.getElementById('modalCareerName');
+        const modalDescription = document.getElementById('modalDescription');
+        const modalKeySkills = document.getElementById('modalKeySkills');
+        const modalEducationRequired = document.getElementById('modalEducationRequired');
+        const modalJobOutlook = document.getElementById('modalJobOutlook');
+        const popupContainer = document.getElementById('popup-container');
+
+        // Tab buttons and content containers
+        const tabAiGuide = document.getElementById('tabAiGuide');
+        const tabFamousCareers = document.getElementById('tabFamousCareers');
+        const aiGuideContent = document.getElementById('aiGuideContent');
+        const famousCareersContent = document.getElementById('famousCareersContent');
+
+        // Parallax elements
+        const parallaxElements = document.querySelectorAll('.parallax-element');
 
         // --- Utility Functions ---
 
         /**
-         * Updates the UI based on the current appState.
+         * Displays a temporary popup message (success or error).
+         * @param {string} message - The message to display.
+         * @param {'success'|'error'} type - The type of message (determines color).
+         * @param {number} duration - How long the message should be visible in milliseconds.
          */
-        function renderUI() {
-            // Splash screen visibility handled by initial load
-            
-            // Tab active states
-            DOMElements.dashboardTab.classList.toggle('bg-green-600', appState.currentView === 'dashboard');
-            DOMElements.dashboardTab.classList.toggle('text-white', appState.currentView === 'dashboard');
-            DOMElements.dashboardTab.classList.toggle('hover:bg-green-700', appState.currentView === 'dashboard');
-            DOMElements.dashboardTab.classList.toggle('bg-gray-700', appState.currentView !== 'dashboard');
-            DOMElements.dashboardTab.classList.toggle('text-gray-300', appState.currentView !== 'dashboard');
-            DOMElements.dashboardTab.classList.toggle('hover:bg-gray-600', appState.currentView !== 'dashboard');
-            
-            DOMElements.insightsTab.classList.toggle('bg-green-600', appState.currentView === 'insights');
-            DOMElements.insightsTab.classList.toggle('text-white', appState.currentView === 'insights');
-            DOMElements.insightsTab.classList.toggle('hover:bg-green-700', appState.currentView === 'insights');
-            DOMElements.insightsTab.classList.toggle('bg-gray-700', appState.currentView !== 'insights');
-            DOMElements.insightsTab.classList.toggle('text-gray-300', appState.currentView !== 'insights');
-            DOMElements.insightsTab.classList.toggle('hover:bg-gray-600', appState.currentView !== 'insights');
+        function showPopupMessage(message, type = 'success', duration = 3000) {
+            const popup = document.createElement('div');
+            popup.className = `popup-message ${type}`;
+            popupContainer.appendChild(popup);
 
-            DOMElements.goalsTab.classList.toggle('bg-green-600', appState.currentView === 'goals');
-            DOMElements.goalsTab.classList.toggle('text-white', appState.currentView === 'goals');
-            DOMElements.goalsTab.classList.toggle('hover:bg-green-700', appState.currentView === 'goals');
-            DOMElements.goalsTab.classList.toggle('bg-gray-700', appState.currentView !== 'goals');
-            DOMElements.goalsTab.classList.toggle('text-gray-300', appState.currentView !== 'goals');
-            DOMElements.goalsTab.classList.toggle('hover:bg-gray-600', appState.currentView !== 'goals');
-
-            DOMElements.settingsTab.classList.toggle('bg-green-600', appState.currentView === 'settings');
-            DOMElements.settingsTab.classList.toggle('text-white', appState.currentView === 'settings');
-            DOMElements.settingsTab.classList.toggle('hover:bg-green-700', appState.currentView === 'settings');
-            DOMElements.settingsTab.classList.toggle('bg-gray-700', appState.currentView !== 'settings');
-            DOMElements.settingsTab.classList.toggle('text-gray-300', appState.currentView !== 'settings');
-            DOMElements.settingsTab.classList.toggle('hover:bg-gray-600', appState.currentView !== 'settings');
-
-            // View visibility
-            DOMElements.dashboardView.classList.toggle('hidden', appState.currentView !== 'dashboard');
-            DOMElements.insightsView.classList.toggle('hidden', appState.currentView !== 'insights');
-            DOMElements.goalsView.classList.toggle('hidden', appState.currentView !== 'goals');
-            DOMElements.settingsView.classList.toggle('hidden', appState.currentView !== 'settings');
-
-            // Insights loading state
-            DOMElements.generateInsightsBtn.disabled = appState.loadingInsights;
-            DOMElements.generateInsightsBtn.classList.toggle('opacity-70', appState.loadingInsights);
-            DOMElements.generateInsightsBtn.classList.toggle('cursor-not-allowed', appState.loadingInsights);
-            DOMElements.insightsLoading.classList.toggle('hidden', !appState.loadingInsights);
-
-            // Render dashboard data
-            renderDashboard();
-            // Render goals list
-            renderGoals();
-            // Render settings (categories and budget limits)
-            renderSettings();
-            // Render goal recommendations
-            renderGoalRecommendations(); // New call
-        }
-
-        /**
-         * Updates the global appState and triggers a UI re-render.
-         * @param {Object} newState - Partial state object to merge.
-         */
-        function updateState(newState) {
-            appState = { ...appState, ...newState };
-            renderUI();
-        }
-
-        /**
-         * Calculates the total monthly expenses for the current month.
-         * @returns {number} The total monthly expenses.
-         */
-        function calculateMonthlyExpenses() {
-            const now = new Date();
-            const currentMonth = now.getMonth();
-            const currentYear = now.getFullYear();
-
-            return appState.expenses.reduce((total, expense) => {
-                const expenseDate = new Date(expense.date);
-                if (expenseDate.getMonth() === currentMonth && expenseDate.getFullYear() === currentYear) {
-                    return total + expense.amount;
-                }
-                return total;
-            }, 0);
-        }
-
-        /**
-         * Calculates spending for each category for the current month.
-         * @returns {Object} An object with category names as keys and total spending as values.
-         */
-        function calculateCategorySpending() {
-            const now = new Date();
-            const currentMonth = now.getMonth();
-            const currentYear = now.getFullYear();
-            const categorySpending = {};
-
-            appState.categories.forEach(cat => categorySpending[cat] = 0); // Initialize all to 0
-
-            appState.expenses.forEach(expense => {
-                const expenseDate = new Date(expense.date);
-                if (expenseDate.getMonth() === currentMonth && expenseDate.getFullYear() === currentYear) {
-                    if (appState.categories.includes(expense.category)) { // Only count if category exists
-                        categorySpending[expense.category] += expense.amount;
-                    }
-                }
-            });
-            return categorySpending;
-        }
-
-        /**
-         * Renders the dashboard view with current financial data.
-         */
-        function renderDashboard() {
-            const monthlyExpenses = calculateMonthlyExpenses();
-            const categorySpending = calculateCategorySpending();
-
-            DOMElements.currentBalanceDisplay.textContent = `$${appState.currentBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-            DOMElements.monthlyExpensesDisplay.textContent = `$${monthlyExpenses.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-
-            // Render category spending summary
-            DOMElements.categorySpendingSummary.innerHTML = '';
-            let hasCategorySpending = false;
-            // Iterate over appState.categories to ensure all categories are shown even if 0 spent
-            for (const category of appState.categories) {
-                const spent = categorySpending[category] || 0;
-                const limit = appState.budgetLimits[category] || 0;
-                const percentage = limit > 0 ? (spent / limit) * 100 : (spent > 0 ? 100 : 0);
-                const progressColor = percentage > 100 ? 'bg-red-500' : 'bg-green-500';
-
-                // Display only if there's spending or a budget limit set
-                if (spent > 0 || limit > 0) {
-                    hasCategorySpending = true;
-                    const categoryDiv = document.createElement('div');
-                    categoryDiv.classList.add('bg-gray-700', 'p-4', 'rounded-xl', 'shadow-md', 'border', 'border-gray-600');
-                    categoryDiv.innerHTML = `
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-lg font-semibold text-white font-inter">${category}</span>
-                            <span class="text-lg font-bold text-white font-inter">$${spent.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} / $${limit.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-                        </div>
-                        <div class="w-full bg-gray-600 rounded-full h-3">
-                            <div class="${progressColor} h-3 rounded-full" style="width: ${Math.min(percentage, 100)}%;"></div>
-                        </div>
-                        <p class="text-right text-sm ${percentage > 100 ? 'text-red-300' : 'text-gray-400'} mt-1 font-inter">${Math.round(percentage)}% ${percentage > 100 ? 'OVER' : 'spent'}</p>
-                    `;
-                    DOMElements.categorySpendingSummary.appendChild(categoryDiv);
-                }
-            }
-            DOMElements.noCategorySpending.classList.toggle('hidden', hasCategorySpending);
-
-
-            // Render recent transactions
-            DOMElements.recentTransactionsList.innerHTML = '';
-            if (appState.expenses.length === 0) {
-                DOMElements.noTransactions.classList.remove('hidden');
-            } else {
-                DOMElements.noTransactions.classList.add('hidden');
-                // Sort by date, newest first, and take top 5
-                const sortedExpenses = [...appState.expenses].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
-                sortedExpenses.forEach(expense => {
-                    const transactionLi = document.createElement('li');
-                    transactionLi.classList.add('flex', 'justify-between', 'items-center', 'bg-gray-700', 'p-4', 'rounded-xl', 'shadow-md', 'border', 'border-gray-600');
-                    transactionLi.innerHTML = `
-                        <div>
-                            <span class="text-lg text-white font-inter">${expense.description}</span>
-                            <p class="text-sm text-gray-400 font-inter">${expense.category} - ${new Date(expense.date).toLocaleDateString()}</p>
-                        </div>
-                        <span class="text-lg text-red-400 font-bold">-$${expense.amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-                    `;
-                    DOMElements.recentTransactionsList.appendChild(transactionLi);
-                });
-            }
-        }
-
-        /**
-         * Simulates fetching AI insights based on current spending.
-         * In a real app, this would involve an API call to a generative AI model.
-         */
-        function generateInsights() {
-            updateState({ loadingInsights: true });
-            DOMElements.insightsContainer.innerHTML = ''; // Clear existing insights
-
-            const categorySpending = calculateCategorySpending();
-            const monthlyExpenses = calculateMonthlyExpenses();
-            const availableCategories = appState.categories.filter(cat => categorySpending[cat] > 0 || appState.budgetLimits[cat] > 0);
-
-            let generatedInsightsCount = 0;
-            const insightsToGenerate = 3;
-
-            // Simple logic for AI insights based on current (mock) data
-            const insightsQueue = [];
-
-            // Add insights about categories over budget
-            for (const category of availableCategories) {
-                const spent = categorySpending[category] || 0;
-                const limit = appState.budgetLimits[category] || 0;
-                if (limit > 0 && spent > limit) {
-                    const overAmount = (spent - limit).toFixed(2);
-                    insightsQueue.push(`Warning: You're over budget in '${category}' by $${overAmount}! Consider cutting back or adjusting your limit.`);
-                }
-            }
-
-            // Add insights about general spending/saving
-            if (monthlyExpenses > (appState.currentBalance * 0.4) ) { // If expenses are high relative to balance
-                 insightsQueue.push("Your current monthly expenses are high compared to your balance. Look for areas to reduce spending, especially non-essentials.");
-            } else if (monthlyExpenses < (appState.currentBalance * 0.2)) {
-                insightsQueue.push("Excellent work keeping your expenses low! Consider increasing your savings contributions or investing.");
-            }
-
-            // Add general tips from generalInsights, trying to get relevant ones
-            const relevantGeneralInsights = appState.generalInsights.filter(insightFunc => {
-                const text = typeof insightFunc === 'function' ? insightFunc(categorySpending).toLowerCase() : insightFunc.toLowerCase(); // Evaluate for keywords
-                return (text.includes('dining out') && categorySpending['Dining Out'] > 0) ||
-                       (text.includes('subscriptions') && Object.keys(appState.budgetLimits).length > 3) ||
-                       (text.includes('groceries') && categorySpending['Groceries'] > 0);
-            });
-
-            const shuffledGeneralInsights = [...relevantGeneralInsights, ...appState.generalInsights].sort(() => 0.5 - Math.random());
-            
-            for (let i = 0; i < shuffledGeneralInsights.length && generatedInsightsCount < insightsToGenerate; i++) {
-                let insightText;
-                if (typeof shuffledGeneralInsights[i] === 'function') {
-                    insightText = shuffledGeneralInsights[i](categorySpending);
-                } else {
-                    insightText = shuffledGeneralInsights[i];
-                }
-                insightsQueue.push(insightText);
-                generatedInsightsCount++;
-            }
-            
-            // Ensure unique insights and limit to 3
-            const uniqueInsights = Array.from(new Set(insightsQueue)).slice(0, insightsToGenerate);
-
+            // Trigger reflow to ensure transition plays
+            void popup.offsetWidth;
+            popup.classList.add('show');
 
             setTimeout(() => {
-                if (uniqueInsights.length === 0) {
-                     const insightDiv = document.createElement('div');
-                    insightDiv.classList.add('bg-gray-700', 'p-6', 'rounded-2xl', 'shadow-lg', 'border', 'border-gray-600', 'animate-fade-in');
-                    insightDiv.innerHTML = `
-                        <h3 class="text-xl font-semibold text-yellow-200 mb-2 font-inter">No Specific Insights Yet!</h3>
-                        <p class="text-gray-200 font-inter">Add more expenses and set budgets to get personalized advice. Keep up the good work!</p>
-                    `;
-                    DOMElements.insightsContainer.appendChild(insightDiv);
-                } else {
-                    uniqueInsights.forEach((insight, index) => {
-                        const insightDiv = document.createElement('div');
-                        insightDiv.classList.add('bg-gray-700', 'p-6', 'rounded-2xl', 'shadow-lg', 'border', 'border-gray-600', 'animate-fade-in');
-                        insightDiv.style.animationDelay = `${index * 0.15}s`;
-                        insightDiv.innerHTML = `
-                            <h3 class="text-xl font-semibold text-yellow-200 mb-2 font-inter">Insight ${index + 1}</h3>
-                            <p class="text-gray-200 font-inter">${insight}</p>
-                        `;
-                        DOMElements.insightsContainer.appendChild(insightDiv);
-                    });
-                }
-                updateState({ loadingInsights: false });
-            }, 2000); // Simulate network delay
+                popup.classList.remove('show');
+                popup.addEventListener('transitionend', () => popup.remove(), { once: true });
+            }, duration);
         }
 
         /**
-         * Renders the list of financial goals.
+         * Shows or hides the loading overlay.
+         * @param {boolean} show - True to show, false to hide.
          */
-        function renderGoals() {
-            DOMElements.goalsList.innerHTML = ''; // Clear existing goals
-            if (appState.goals.length === 0) {
-                DOMElements.noGoals.classList.remove('hidden');
+        function toggleLoading(show) {
+            isLoading = show;
+            if (show) {
+                loadingOverlay.classList.add('show');
             } else {
-                DOMElements.noGoals.classList.add('hidden');
-                appState.goals.forEach((goal, index) => {
-                    const percentage = (goal.saved / goal.target) * 100;
-                    const goalDiv = document.createElement('div');
-                    goalDiv.classList.add('bg-gray-700', 'p-6', 'rounded-2xl', 'shadow-lg', 'border', 'border-gray-600', 'animate-fade-in');
-                    goalDiv.style.animationDelay = `${index * 0.1}s`;
-                    goalDiv.innerHTML = `
-                        <h3 class="text-xl font-semibold text-teal-200 mb-2 font-inter">${goal.name}</h3>
-                        <p class="text-gray-300 mb-3 font-inter">Target: <span class="font-bold">$${goal.target.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span> | Saved: <span class="font-bold text-green-300">$${goal.saved.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span></p>
-                        <div class="w-full bg-gray-600 rounded-full h-3">
-                            <div class="bg-green-500 h-3 rounded-full" style="width: ${Math.min(percentage, 100)}%;"></div>
-                        </div>
-                        <p class="text-right text-sm text-gray-400 mt-1 font-inter">${Math.round(percentage)}% Complete</p>
-                        <div class="flex flex-col sm:flex-row gap-2 mt-4">
-                            <button class="flex-1 py-2 px-4 rounded-lg bg-blue-500 text-white font-bold hover:bg-blue-600 transition-colors view-recommendations-btn" data-id="${goal.id}">
-                                View Recommendations
-                            </button>
-                            <button class="flex-1 py-2 px-4 rounded-lg bg-red-500 text-white font-bold hover:bg-red-600 transition-colors remove-goal-btn" data-id="${goal.id}">
-                                Remove
-                            </button>
-                        </div>
-                    `;
-                    DOMElements.goalsList.appendChild(goalDiv);
-                });
+                loadingOverlay.classList.remove('show');
             }
+            recommendButton.disabled = show;
+            userInputTextarea.disabled = show;
+        }
 
-            document.querySelectorAll('.remove-goal-btn').forEach(button => {
-                button.onclick = (e) => removeGoal(e.target.dataset.id);
+        // --- Parallax Scrolling Logic ---
+        let ticking = false;
+
+        /**
+         * Updates the position of parallax elements based on scroll.
+         */
+        function updateParallax() {
+            const scrolled = window.pageYOffset;
+
+            parallaxElements.forEach(element => {
+                const depth = parseFloat(element.dataset.depth);
+                const translateY = -scrolled * depth;
+                element.style.transform = `translate(-50%, -50%) translateY(${translateY}px)`;
             });
-            document.querySelectorAll('.view-recommendations-btn').forEach(button => {
-                button.onclick = (e) => viewGoalRecommendations(e.target.dataset.id); // New handler
-            });
+
+            ticking = false;
         }
 
         /**
-         * Adds a new financial goal to the state and local storage.
+         * Initializes the parallax effect by adding a scroll listener.
          */
-        function addGoal() {
-            const name = DOMElements.goalNameInput.value.trim();
-            const amount = parseFloat(DOMElements.goalAmountInput.value);
-
-            if (!name || isNaN(amount) || amount <= 0) {
-                alert('Please enter a valid goal name and a positive target amount.');
-                return;
-            }
-
-            const newGoal = {
-                id: Date.now().toString(), // Simple unique ID
-                name: name,
-                target: amount,
-                saved: 0 // Start with 0 saved
-            };
-
-            const updatedGoals = [...appState.goals, newGoal];
-            localStorage.setItem('pennywise_goals', JSON.stringify(updatedGoals));
-            updateState({ goals: updatedGoals });
-
-            // Clear inputs
-            DOMElements.goalNameInput.value = '';
-            DOMElements.goalAmountInput.value = '';
-
-            // Automatically show recommendations for the newly added goal
-            viewGoalRecommendations(newGoal.id);
-        }
-
-        /**
-         * Removes a goal from the state and local storage.
-         * @param {string} id - The ID of the goal to remove.
-         */
-        function removeGoal(id) {
-            if (appState.selectedGoalForRecommendations && appState.selectedGoalForRecommendations.id === id) {
-                updateState({ selectedGoalForRecommendations: null }); // Hide recs if goal is removed
-            }
-            const updatedGoals = appState.goals.filter(goal => goal.id !== id);
-            localStorage.setItem('pennywise_goals', JSON.stringify(updatedGoals));
-            updateState({ goals: updatedGoals });
-        }
-
-        /**
-         * Sets the selected goal for recommendations and triggers their generation and display.
-         * @param {string} goalId - The ID of the goal to show recommendations for.
-         */
-        function viewGoalRecommendations(goalId) {
-            const selectedGoal = appState.goals.find(g => g.id === goalId);
-            if (selectedGoal) {
-                updateState({ selectedGoalForRecommendations: selectedGoal, currentView: 'goals' });
-                generateGoalRecommendations(selectedGoal);
-            }
-        }
-
-        /**
-         * Generates and displays recommendations for the selected goal.
-         * @param {object} goal - The goal object for which to generate recommendations.
-         */
-        function generateGoalRecommendations(goal) {
-            DOMElements.goalRecommendationsTitle.textContent = `Recommendations for "${goal.name}"`;
-            DOMElements.goalRecommendationsList.innerHTML = ''; // Clear previous recommendations
-
-            const categorySpending = calculateCategorySpending();
-            const insightsQueue = [];
-            const generatedCount = 0;
-            const insightsToGenerate = 3; // Aim for 3 unique insights
-
-            // Try to get specific insights first
-            appState.goalInsightsGenerator.forEach(insightFunc => {
-                const insightText = insightFunc(goal, categorySpending);
-                if (insightText && !insightsQueue.includes(insightText)) {
-                    insightsQueue.push(insightText);
+        function initParallax() {
+            window.addEventListener('scroll', () => {
+                if (!ticking) {
+                    window.requestAnimationFrame(updateParallax);
+                    ticking = true;
                 }
             });
-
-            // Fallback to general insights if not enough specific ones
-            if (insightsQueue.length < insightsToGenerate) {
-                const shuffledGeneral = [...appState.generalInsights].sort(() => 0.5 - Math.random());
-                shuffledGeneral.forEach(insightFunc => {
-                    const insightText = typeof insightFunc === 'function' ? insightFunc(categorySpending) : insightFunc;
-                    if (insightText && !insightsQueue.includes(insightText) && insightsQueue.length < insightsToGenerate) {
-                        insightsQueue.push(insightText);
-                    }
-                });
-            }
-            
-            // Display insights
-            if (insightsQueue.length === 0) {
-                DOMElements.goalRecommendationsList.innerHTML = `<p class="text-gray-300 text-center font-inter">No specific recommendations yet. Keep tracking your finances!</p>`;
-            } else {
-                insightsQueue.slice(0, insightsToGenerate).forEach((rec, index) => {
-                    const recDiv = document.createElement('div');
-                    recDiv.classList.add('bg-gray-800', 'p-4', 'rounded-lg', 'shadow-md', 'border', 'border-gray-600', 'animate-fade-in');
-                    recDiv.style.animationDelay = `${index * 0.1}s`; /* Corrected line */
-                    recDiv.innerHTML = `
-                        <p class="text-gray-200 font-inter">${rec}</p>
-                    `;
-                    DOMElements.goalRecommendationsList.appendChild(recDiv);
-                });
-            }
+            // Initial call to set positions
+            updateParallax();
         }
 
-        /**
-         * Renders the goal recommendations section based on `appState.selectedGoalForRecommendations`.
-         */
-        function renderGoalRecommendations() {
-            if (appState.selectedGoalForRecommendations) {
-                DOMElements.goalRecommendationsSection.classList.remove('hidden');
-                // Re-render recommendations content if the section is becoming visible or goal changed
-                generateGoalRecommendations(appState.selectedGoalForRecommendations);
-            } else {
-                DOMElements.goalRecommendationsSection.classList.add('hidden');
-            }
-        }
+        // --- AI Integration (Gemini API Call) ---
 
         /**
-         * Hides the goal recommendations section.
+         * Fetches career recommendations from the Gemini API based on user input.
+         * @param {string} input - The user's description of interests, skills, etc.
+         * @returns {Promise<Array<Object>>} A promise that resolves to an array of career objects.
          */
-        function hideGoalRecommendations() {
-            updateState({ selectedGoalForRecommendations: null });
-        }
+        async function getCareerRecommendations(input) {
+            toggleLoading(true);
+            try {
+                const chatHistory = [];
+                const prompt = `Based on the following user input: "${input}", recommend 3-5 potential career paths. For each career, provide a brief description, 3-5 key skills, required education (e.g., "Bachelor's Degree", "High School Diploma", "Master's Degree"), and a general job outlook (e.g., "Excellent", "Good", "Average", "Limited"). Make sure the key skills are concise and directly related to the career.`;
 
+                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
 
-        /**
-         * Shows the add expense modal.
-         */
-        function showAddExpenseModal() {
-            DOMElements.addExpenseModal.classList.remove('hidden');
-            // Populate category select
-            DOMElements.expenseCategorySelect.innerHTML = appState.categories.map(cat => `<option value="${cat}">${cat}</option>`).join('');
-            // Set default date to today
-            DOMElements.expenseDateInput.value = new Date().toISOString().split('T')[0];
-        }
-
-        /**
-         * Hides the add expense modal.
-         */
-        function hideAddExpenseModal() {
-            DOMElements.addExpenseModal.classList.add('hidden');
-            // Clear form
-            DOMElements.expenseDescriptionInput.value = '';
-            DOMElements.expenseAmountInput.value = '';
-            DOMElements.expenseCategorySelect.value = appState.categories[0] || '';
-            DOMElements.expenseDateInput.value = '';
-        }
-
-        /**
-         * Adds a new expense from the modal.
-         */
-        function addExpense() {
-            const description = DOMElements.expenseDescriptionInput.value.trim();
-            const amount = parseFloat(DOMElements.expenseAmountInput.value);
-            const category = DOMElements.expenseCategorySelect.value;
-            const date = DOMElements.expenseDateInput.value;
-
-            if (!description || isNaN(amount) || amount <= 0 || !category || !date) {
-                alert('Please fill in all expense details correctly.');
-                return;
-            }
-
-            const newExpense = {
-                id: Date.now().toString(),
-                description: description,
-                amount: amount,
-                category: category,
-                date: date
-            };
-
-            const updatedExpenses = [...appState.expenses, newExpense];
-            const newBalance = appState.currentBalance - amount;
-
-            localStorage.setItem('pennywise_expenses', JSON.stringify(updatedExpenses));
-            localStorage.setItem('pennywise_balance', newBalance.toFixed(2));
-
-            updateState({ expenses: updatedExpenses, currentBalance: newBalance });
-            hideAddExpenseModal();
-        }
-
-        /**
-         * Renders the settings view, including category management and budget limits.
-         */
-        function renderSettings() {
-            // Set manual balance input value
-            DOMElements.manualBalanceInput.value = appState.currentBalance.toFixed(2);
-
-            // Render categories
-            DOMElements.categoryList.innerHTML = '';
-            appState.categories.forEach(category => {
-                const li = document.createElement('li');
-                li.classList.add('flex', 'justify-between', 'items-center', 'bg-gray-800', 'p-3', 'rounded-lg', 'border', 'border-gray-600');
-                li.innerHTML = `
-                    <span class="text-white text-lg font-inter">${category}</span>
-                    <button class="text-red-400 hover:text-red-500 transition-colors remove-category-btn" data-category="${category}">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                `;
-                DOMElements.categoryList.appendChild(li);
-            });
-
-            document.querySelectorAll('.remove-category-btn').forEach(button => {
-                button.onclick = (e) => removeCategory(e.target.dataset.category || e.target.closest('button').dataset.category);
-            });
-
-
-            // Render budget limits
-            DOMElements.budgetLimitsContainer.innerHTML = '';
-            if (appState.categories.length === 0) {
-                 DOMElements.noBudgetsSet.classList.remove('hidden');
-            } else {
-                DOMElements.noBudgetsSet.classList.add('hidden');
-                appState.categories.forEach(category => {
-                    const limit = appState.budgetLimits[category] || 0;
-                    const div = document.createElement('div');
-                    div.classList.add('flex', 'items-center', 'gap-4', 'bg-gray-700', 'p-4', 'rounded-lg', 'shadow-md', 'border', 'border-gray-600');
-                    div.innerHTML = `
-                        <label for="budget-${category}" class="flex-grow text-gray-300 text-lg font-inter">${category}:</label>
-                        <span class="text-gray-300 font-inter">$</span>
-                        <input type="number" id="budget-${category}" class="flex-shrink-0 w-28 p-2 rounded-lg bg-gray-800 border border-gray-600 text-white font-inter budget-input" value="${limit}" data-category="${category}">
-                    `;
-                    DOMElements.budgetLimitsContainer.appendChild(div);
-                });
-            }
-        }
-
-        /**
-         * Adds a new category.
-         */
-        function addCategory() {
-            const newCategory = DOMElements.newCategoryInput.value.trim();
-            if (newCategory && !appState.categories.includes(newCategory)) {
-                const updatedCategories = [...appState.categories, newCategory];
-                const updatedBudgetLimits = { ...appState.budgetLimits, [newCategory]: 0 }; // Add with default 0 budget
-                localStorage.setItem('pennywise_categories', JSON.stringify(updatedCategories));
-                localStorage.setItem('pennywise_budget_limits', JSON.stringify(updatedBudgetLimits));
-                updateState({ categories: updatedCategories, budgetLimits: updatedBudgetLimits });
-                DOMElements.newCategoryInput.value = '';
-            } else if (newCategory && appState.categories.includes(newCategory)) {
-                alert('Category already exists!');
-            }
-        }
-
-        /**
-         * Removes a category.
-         * @param {string} categoryToRemove - The category name to remove.
-         */
-        function removeCategory(categoryToRemove) {
-            if (confirm(`Are you sure you want to remove the category "${categoryToRemove}"? This will not remove existing expenses in this category.`)) {
-                const updatedCategories = appState.categories.filter(cat => cat !== categoryToRemove);
-                const updatedBudgetLimits = { ...appState.budgetLimits };
-                delete updatedBudgetLimits[categoryToRemove]; // Remove budget for this category
-
-                localStorage.setItem('pennywise_categories', JSON.stringify(updatedCategories));
-                localStorage.setItem('pennywise_budget_limits', JSON.stringify(updatedBudgetLimits));
-                updateState({ categories: updatedCategories, budgetLimits: updatedBudgetLimits });
-            }
-        }
-
-        /**
-         * Saves the updated budget limits.
-         */
-        function saveBudgetLimits() {
-            const updatedBudgetLimits = { ...appState.budgetLimits };
-            DOMElements.budgetLimitsContainer.querySelectorAll('.budget-input').forEach(input => {
-                const category = input.dataset.category;
-                const limit = parseFloat(input.value);
-                if (!isNaN(limit) && limit >= 0) {
-                    updatedBudgetLimits[category] = limit;
-                } else {
-                    updatedBudgetLimits[category] = 0; // Default to 0 if invalid
-                }
-            });
-            localStorage.setItem('pennywise_budget_limits', JSON.stringify(updatedBudgetLimits));
-            updateState({ budgetLimits: updatedBudgetLimits });
-            alert('Monthly budgets saved!');
-        }
-
-        /**
-         * Manually updates the current bank balance.
-         */
-        function updateBalanceManually() {
-            const newBalance = parseFloat(DOMElements.manualBalanceInput.value);
-            if (isNaN(newBalance)) {
-                alert('Please enter a valid number for your balance.');
-                return;
-            }
-            localStorage.setItem('pennywise_balance', newBalance.toFixed(2));
-            updateState({ currentBalance: newBalance });
-            alert('Bank balance updated successfully!');
-        }
-
-        /**
-         * Resets all app data.
-         */
-        function resetAppData() {
-            if (confirm('Are you sure you want to reset ALL app data (expenses, goals, categories, budgets, balance)? This action cannot be undone.')) {
-                localStorage.clear(); // Clear all local storage data
-                // Reset appState to initial values
-                appState = {
-                    currentView: 'dashboard',
-                    currentBalance: 5000.00,
-                    expenses: [],
-                    goals: [],
-                    categories: ['Groceries', 'Utilities', 'Rent', 'Transport', 'Entertainment', 'Dining Out', 'Shopping', 'Health', 'Education', 'Salary'],
-                    budgetLimits: {
-                        'Groceries': 400, 'Utilities': 150, 'Rent': 1000, 'Transport': 100, 'Entertainment': 80,
-                        'Dining Out': 120, 'Shopping': 200, 'Health': 50, 'Education': 30
-                    },
-                    loadingInsights: false,
-                    selectedGoalForRecommendations: null,
-                    generalInsights: [
-                        (spending) => `You've spent $${spending['Dining Out'] ? spending['Dining Out'].toFixed(2) : '0.00'} on dining out this month. Consider cooking at home more often to save an estimated $50-$100!`,
-                        (spending) => `Your entertainment spending is $${spending['Entertainment'] ? spending['Entertainment'].toFixed(2) : '0.00'}. Try free activities or look for discounts to stay within your budget.`,
-                        (spending) => `Great job managing your rent! It's a significant expense, and keeping it stable is key to financial health.`,
-                        (spending) => `Your transport costs ($${spending['Transport'] ? spending['Transport'].toFixed(2) : '0.00'}) seem manageable. Exploring public transport or cycling could offer further savings.`,
-                        (spending) => `Groceries are at $${spending['Groceries'] ? spending['Groceries'].toFixed(2) : '0.00'}. Planning your meals and making a list before shopping can help reduce impulse buys and waste.`,
-                        (spending) => `You're doing well with your budget overall! Keep tracking your expenses diligently for continued financial clarity.`,
-                        (spending) => `Review your monthly subscriptions. Even small forgotten payments can add up to significant savings over time.`,
-                        (spending) => `Look for ways to optimize your utility usage. Small changes like turning off lights or unplugging electronics can lower your bills.`,
-                        (spending) => `Consider setting up automated transfers to your savings goals. 'Set it and forget it' is a powerful savings strategy.`,
-                        (spending) => `Your income is strong! Think about increasing your contributions to long-term investments or retirement funds.`
-                    ],
-                    goalInsightsGenerator: [
-                        (goal, spending) => {
-                            const remaining = goal.target - goal.saved;
-                            if (remaining > 0) {
-                                return `To reach your '${goal.name}' goal of $${goal.target.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (need $${remaining.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}), identify your top 3 spending categories and aim to reduce each by 10% this month.`;
+                const payload = {
+                    contents: chatHistory,
+                    generationConfig: {
+                        responseMimeType: "application/json",
+                        responseSchema: {
+                            type: "ARRAY",
+                            items: {
+                                type: "OBJECT",
+                                properties: {
+                                    "careerName": { "type": "STRING" },
+                                    "description": { "type": "STRING" },
+                                    "keySkills": {
+                                        "type": "ARRAY",
+                                        "items": { "type": "STRING" }
+                                    },
+                                    "educationRequired": { "type": "STRING" },
+                                    "jobOutlook": { "type": "STRING" }
+                                },
+                                "propertyOrdering": ["careerName", "description", "keySkills", "educationRequired", "jobOutlook"]
                             }
-                            return null;
-                        },
-                        (goal, spending) => {
-                            const diningOutSpent = spending['Dining Out'] || 0;
-                            if (diningOutSpent > 50) {
-                                return `For your '${goal.name}' goal, cutting back on dining out could make a huge difference. You've spent $${diningOutSpent.toFixed(2)} on dining out this month. Try reducing it by 25% to save over $${(diningOutSpent * 0.25).toFixed(2)} towards your goal.`;
-                            }
-                            return null;
-                        },
-                        (goal, spending) => {
-                            const shoppingSpent = spending['Shopping'] || 0;
-                            if (shoppingSpent > 100) {
-                                return `Consider a 'no-spend' week or month for non-essential shopping to accelerate your '${goal.name}' savings. You spent $${shoppingSpent.toFixed(2)} on shopping this month.`;
-                            }
-                            return null;
-                        },
-                        (goal, spending) => {
-                            const remaining = goal.target - goal.saved;
-                            const monthlySaveNeeded = remaining / 12; // To reach in 1 year
-                            if (monthlySaveNeeded > 0) {
-                                return `If you aim to save for '${goal.name}' over the next year, try to put aside at least $${monthlySaveNeeded.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} per month. Automate this transfer!`;
-                            }
-                            return null;
-                        },
-                        (goal, spending) => {
-                            if (goal.target > 2000) { // Larger goals
-                                return `For a big goal like '${goal.name}', explore side hustles or selling unused items. Extra income can dramatically boost your progress.`;
-                            }
-                            return null;
-                        },
-                        (goal, spending) => {
-                            return `Review your current budget limits in the Settings tab. Can you slightly decrease limits in non-essential categories to free up funds for '${goal.name}'?`;
-                        },
-                        (goal, spending) => {
-                            return `Track every small expense for a week. You might be surprised where little amounts go, and these can be redirected to your '${goal.name}' goal.`;
                         }
-                    ]
+                    }
                 };
-                alert('All app data has been reset!');
-                // Re-initialize local storage with default values after reset
-                localStorage.setItem('pennywise_balance', appState.currentBalance.toFixed(2));
-                localStorage.setItem('pennywise_expenses', JSON.stringify(appState.expenses));
-                localStorage.setItem('pennywise_goals', JSON.stringify(appState.goals));
-                localStorage.setItem('pennywise_categories', JSON.stringify(appState.categories));
-                localStorage.setItem('pennywise_budget_limits', JSON.stringify(appState.budgetLimits));
 
-                updateState({}); // Trigger full re-render
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error("API Error Response:", errorData);
+                    throw new Error(`API request failed with status ${response.status}: ${errorData.error.message || 'Unknown error'}`);
+                }
+
+                const result = await response.json();
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const jsonString = result.candidates[0].content.parts[0].text;
+                    const parsedJson = JSON.parse(jsonString);
+                    return parsedJson;
+                } else {
+                    throw new Error("Invalid response structure from AI model.");
+                }
+            } catch (error) {
+                console.error("Error getting career recommendations:", error);
+                showPopupMessage(`Failed to get recommendations: ${error.message}. Please try again.`, 'error');
+                return [];
+            } finally {
+                toggleLoading(false);
+            }
+        }
+
+        // --- UI Rendering Functions ---
+
+        /**
+         * Creates a single career card HTML element.
+         * @param {Object} career - The career object.
+         * @returns {HTMLElement} The created div element for the career card.
+         */
+        function createCareerCard(career) {
+            const card = document.createElement('div');
+            card.className = 'career-card';
+            card.innerHTML = `
+                <h3>${career.careerName}</h3>
+                <p>${career.description}</p>
+                <button class="btn view-details-btn" data-career-name="${career.careerName}">
+                    View Details <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            `;
+            // Attach event listener to the "View Details" button
+            card.querySelector('.view-details-btn').addEventListener('click', () => {
+                openCareerDetailModal(career); // Pass the full career object
+            });
+            return card;
+        }
+
+        /**
+         * Renders the recommended career cards in the AI results container.
+         * @param {Array<Object>} careers - An array of career objects.
+         */
+        function renderAiCareerCards(careers) {
+            aiResultsContainer.innerHTML = ''; // Clear previous results
+            if (careers.length === 0) {
+                aiResultsContainer.innerHTML = `
+                    <p class="text-center text-white/80 text-lg col-span-full">
+                        No AI recommendations found. Please try again with different input.
+                    </p>
+                `;
+                return;
+            }
+
+            careers.forEach(career => {
+                aiResultsContainer.appendChild(createCareerCard(career));
+            });
+        }
+
+        /**
+         * Renders the famous career cards in the famous careers container.
+         */
+        function renderFamousCareersSection() {
+            famousCareersContainer.innerHTML = ''; // Clear previous results
+            famousCareersData.forEach(career => {
+                famousCareersContainer.appendChild(createCareerCard(career));
+            });
+        }
+
+        /**
+         * Opens the modal with detailed information about a selected career.
+         * @param {Object} career - The career object to display.
+         */
+        function openCareerDetailModal(career) {
+            selectedCareer = career;
+            modalCareerName.textContent = career.careerName;
+            modalDescription.textContent = career.description;
+
+            modalKeySkills.innerHTML = '';
+            if (career.keySkills && career.keySkills.length > 0) {
+                career.keySkills.forEach(skill => {
+                    const li = document.createElement('li');
+                    li.textContent = skill;
+                    modalKeySkills.appendChild(li);
+                });
+            } else {
+                modalKeySkills.innerHTML = '<li>N/A</li>';
+            }
+
+            modalEducationRequired.textContent = career.educationRequired || 'N/A';
+            modalJobOutlook.textContent = career.jobOutlook || 'N/A';
+
+            careerDetailModal.classList.add('show');
+            document.body.style.overflow = 'hidden'; // Prevent scrolling background
+        }
+
+        /**
+         * Closes the career detail modal.
+         */
+        function closeCareerDetailModal() {
+            selectedCareer = null;
+            careerDetailModal.classList.remove('show');
+            document.body.style.overflow = 'auto'; // Re-enable scrolling
+        }
+
+        /**
+         * Manages which tab content is visible.
+         * @param {string} view - The view to show ('ai-guide' or 'famous-careers').
+         */
+        function showView(view) {
+            currentView = view;
+
+            // Update tab button active states
+            tabAiGuide.classList.remove('active');
+            tabFamousCareers.classList.remove('active');
+            if (currentView === 'ai-guide') {
+                tabAiGuide.classList.add('active');
+            } else {
+                tabFamousCareers.classList.add('active');
+            }
+
+            // Toggle content visibility
+            aiGuideContent.classList.add('hidden');
+            famousCareersContent.classList.add('hidden');
+
+            if (currentView === 'ai-guide') {
+                aiGuideContent.classList.remove('hidden');
+                // If AI results were previously generated, re-render them
+                if (recommendedCareers.length > 0) {
+                    renderAiCareerCards(recommendedCareers);
+                } else {
+                    aiResultsContainer.innerHTML = ''; // Clear if no results
+                }
+            } else {
+                famousCareersContent.classList.remove('hidden');
+                renderFamousCareersSection(); // Render famous careers when tab is active
             }
         }
 
 
-        // --- Event Listeners and Initial Setup ---
-        document.addEventListener('DOMContentLoaded', () => {
-            // Define splash screen transition duration from CSS for accurate timing
-            const splashTransitionDuration = parseFloat(getComputedStyle(DOMElements.splashScreen).transitionDuration) * 1000; // Convert to milliseconds
+        // --- Event Listeners ---
 
-            // Hide splash screen after its animations
-            setTimeout(() => {
-                DOMElements.splashScreen.classList.add('opacity-0');
-                DOMElements.splashScreen.style.pointerEvents = 'none'; // Disable interactions immediately
-
-                setTimeout(() => {
-                    DOMElements.splashScreen.style.display = 'none'; // Hide completely
-                    DOMElements.appRoot.classList.remove('app-hidden'); // Show app-root
-                    document.body.style.overflow = 'auto'; // Re-enable scrolling
-                    // Initial render of insights and goals once app is visible
-                    generateInsights(); // Generate initial insights
-                }, splashTransitionDuration); // Wait for splash fade-out transition
-            }, 3000); // Display splash for 3 seconds initially
-
-            // Load data from local storage
-            const storedBalance = localStorage.getItem('pennywise_balance');
-            if (storedBalance) {
-                appState.currentBalance = parseFloat(storedBalance);
+        // Handle recommendation button click
+        recommendButton.addEventListener('click', async () => {
+            userInput = userInputTextarea.value.trim();
+            if (userInput === '') {
+                showPopupMessage('Please describe your interests, skills, and education to get recommendations.', 'error');
+                return;
             }
-            const storedExpenses = localStorage.getItem('pennywise_expenses');
-            if (storedExpenses) {
-                try { appState.expenses = JSON.parse(storedExpenses); } catch (e) { console.error("Failed to parse expenses:", e); appState.expenses = []; }
-            }
-            const storedGoals = localStorage.getItem('pennywise_goals');
-            if (storedGoals) {
-                try { appState.goals = JSON.parse(storedGoals); } catch (e) { console.error("Failed to parse goals:", e); appState.goals = []; }
-            }
-            const storedCategories = localStorage.getItem('pennywise_categories');
-            if (storedCategories) {
-                try { appState.categories = JSON.parse(storedCategories); } catch (e) { console.error("Failed to parse categories:", e); }
-            }
-             const storedBudgetLimits = localStorage.getItem('pennywise_budget_limits');
-            if (storedBudgetLimits) {
-                try { appState.budgetLimits = JSON.parse(storedBudgetLimits); } catch (e) { console.error("Failed to parse budget limits:", e); }
-            }
-            
-            // Navigation tab listeners
-            DOMElements.dashboardTab.addEventListener('click', () => updateState({ currentView: 'dashboard' }));
-            DOMElements.insightsTab.addEventListener('click', () => {
-                updateState({ currentView: 'insights' });
-                generateInsights(); // Re-generate insights when tab is clicked
-            });
-            DOMElements.goalsTab.addEventListener('click', () => updateState({ currentView: 'goals' }));
-            DOMElements.settingsTab.addEventListener('click', () => updateState({ currentView: 'settings' }));
-
-            // Dashboard buttons
-            DOMElements.addExpenseBtn.addEventListener('click', showAddExpenseModal);
-
-            // Expense Modal buttons
-            DOMElements.cancelExpenseBtn.addEventListener('click', hideAddExpenseModal);
-            DOMElements.saveExpenseBtn.addEventListener('click', addExpense);
-
-            // Insights buttons
-            DOMElements.generateInsightsBtn.addEventListener('click', generateInsights);
-            
-            // Goals buttons
-            DOMElements.addGoalBtn.addEventListener('click', addGoal);
-            DOMElements.closeRecommendationsBtn.addEventListener('click', hideGoalRecommendations); // New listener
-
-            // Settings buttons
-            DOMElements.manualBalanceInput.addEventListener('change', () => { /* no action needed, value read on button click */ }); 
-            DOMElements.updateBalanceBtn.addEventListener('click', updateBalanceManually); 
-            DOMElements.addCategoryBtn.addEventListener('click', addCategory);
-            DOMElements.saveBudgetsBtn.addEventListener('click', saveBudgetLimits);
-            DOMElements.resetAppBtn.addEventListener('click', resetAppData);
-
-            // Initial render
-            renderUI();
+            recommendedCareers = await getCareerRecommendations(userInput);
+            renderAiCareerCards(recommendedCareers); // Render AI results
         });
+
+        // Handle modal close button click
+        modalCloseButton.addEventListener('click', closeCareerDetailModal);
+
+        // Close modal when clicking outside the content
+        careerDetailModal.addEventListener('click', (e) => {
+            if (e.target === careerDetailModal) {
+                closeCareerDetailModal();
+            }
+        });
+
+        // Tab button listeners
+        tabAiGuide.addEventListener('click', () => showView('ai-guide'));
+        tabFamousCareers.addEventListener('click', () => showView('famous-careers'));
+
+
+        // --- Initial Application Load ---
+        window.onload = () => {
+            // Pre-fill the user input textarea
+            userInputTextarea.value = "I am interested in technology, have strong programming skills, and a Bachelor's degree in Computer Science. I'm looking for a challenging role with good career progression.";
+
+            // Show splash screen initially
+            splashScreen.style.display = 'flex';
+            document.body.style.overflow = 'hidden'; // Prevent scrolling during splash
+
+            // Initialize parallax for splash screen
+            initParallax();
+
+            // After a delay, fade out splash screen and reveal main app
+            setTimeout(() => {
+                splashScreen.classList.add('fade-out');
+                splashScreen.addEventListener('transitionend', () => {
+                    splashScreen.style.display = 'none';
+                    mainApp.classList.remove('hidden'); // Show main app
+                    mainApp.classList.add('show'); // Trigger fade-in animation
+                    document.body.style.overflow = 'auto'; // Re-enable scrolling
+                    userInputTextarea.focus(); // Focus on input field
+                    showView('ai-guide'); // Show AI Guide tab by default
+                }, { once: true });
+            }, 4000); // Display splash for 4 seconds
+        };
     </script>
 </body>
 </html>
