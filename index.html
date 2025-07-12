@@ -3,1054 +3,616 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Career Guide</title>
+    <title>Intelligent Personal Finance Advisor</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts - Poppins (for general text), Playfair Display (for titles) -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <!-- Google Fonts - Inter (for a modern look), Montserrat (for headings) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet">
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
     <style>
-        /* Custom CSS Variables for consistent theming */
-        :root {
-            --primary-color: #7F00FF; /* Electric Violet */
-            --secondary-color: #E100FF; /* Neon Pink */
-            --accent-color: #00DBDE; /* Aqua */
-            --text-color-light: #E0F7FA; /* Updated: Light cyan-tinted white for text on dark backgrounds */
-            --text-color-dark: #333333; /* Dark gray for text on light backgrounds */
-            --glass-bg-color: rgba(255, 255, 255, 0.1); /* Lighter glass background */
-            --glass-border-color: rgba(255, 255, 255, 0.3); /* Lighter glass border */
-            --glass-shadow-color: rgba(31, 38, 135, 0.4); /* Stronger shadow */
-
-            /* Updated main body gradient colors */
-            --body-gradient-start: #6A11CB; /* Deep Purple */
-            --body-gradient-mid: #2575FC;   /* Bright Blue */
-            --body-gradient-end: #00DBDE;   /* Aqua */
-        }
-
         body {
-            font-family: 'Poppins', sans-serif;
-            overflow-x: hidden; /* Prevent horizontal scroll */
+            font-family: 'Inter', sans-serif;
             min-height: 100vh;
-            /* Updated background gradient for the main page with three colors */
-            background: linear-gradient(135deg, var(--body-gradient-start), var(--body-gradient-mid), var(--body-gradient-end));
-            background-size: 600% 600%; /* Increased size for more dynamic animation */
-            animation: gradientShift 20s ease infinite alternate; /* Slower, alternating animation */
-            color: var(--text-color-light); /* Default text color for body, updated */
-            scroll-behavior: smooth;
+            overflow-x: hidden; /* Hide horizontal scrollbar during transitions */
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background: linear-gradient(135deg, #1A202C, #2D3748, #4A5568); /* Dark to lighter gray gradient */
+            color: #e2e8f0; /* Light gray for general text */
+        }
+        .font-montserrat {
+            font-family: 'Montserrat', sans-serif;
+        }
+        .font-inter {
+            font-family: 'Inter', sans-serif;
         }
 
-        /* Gradient Shift Animation */
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* Splash Screen Styles */
-        #splash-screen {
-            position: fixed;
-            inset: 0;
-            /* Updated splash screen background gradient */
-            background: linear-gradient(135deg, #00C6FF, #0072FF, #8E2DE2); /* Bright Sky Blue -> Deep Blue -> Rich Purple */
-            background-size: 400% 400%;
-            animation: gradientShift 18s ease infinite;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            z-index: 1000;
-            opacity: 1;
-            transition: opacity 1s ease-out;
-            overflow: hidden;
-            perspective: 1000px; /* For 3D transforms */
-        }
-
-        #splash-screen.fade-out {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .splash-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 5rem; /* Larger */
-            font-weight: 900;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.9), 0 0 40px rgba(255, 255, 255, 0.7); /* Stronger glow */
-            /* Background gradient for splash screen title (remains white/light gray) */
-            background: linear-gradient(45deg, #FFFFFF, #F0F0F0, #E0E0E0);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            color: transparent;
-            animation: splashTextAppear 1.5s ease-out forwards, splashTextPulse 2.5s ease-in-out infinite alternate;
-            transform: scale(0.8) translateY(-20px);
-            opacity: 0;
-            position: relative;
-            z-index: 20;
-        }
-
-        .splash-tagline {
-            font-family: 'Poppins', sans-serif;
-            font-size: 2rem;
-            font-weight: 500;
-            color: #E0E7FF; /* Light blue-gray for tagline */
-            text-shadow: 0 0 10px rgba(0, 0, 0, 0.7); /* Stronger shadow */
-            opacity: 0;
-            transform: translateY(30px);
-            animation: taglineFadeIn 1s ease-out 1.8s forwards;
-            position: relative;
-            z-index: 20;
-        }
-
-        /* Splash Screen Animations */
-        @keyframes splashTextAppear {
-            0% { opacity: 0; transform: scale(0.8) translateY(-20px); }
+        /* Splash Screen Animations from pennywise.html */
+        @keyframes splash-pop-in {
+            0% { opacity: 0; transform: scale(0.8) translateY(20px); }
             100% { opacity: 1; transform: scale(1) translateY(0); }
         }
-
-        @keyframes splashTextPulse {
-            0%, 100% { text-shadow: 0 0 20px rgba(255, 255, 255, 0.9), 0 0 40px rgba(255, 255, 255, 0.7); }
-            50% { text-shadow: 0 0 25px rgba(255, 255, 255, 1), 0 0 50px rgba(255, 255, 255, 0.9); }
+        .animate-splash-pop-in {
+            animation: splash-pop-in 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
         }
 
-        @keyframes taglineFadeIn {
-            0% { opacity: 0; transform: translateY(30px); }
+        @keyframes splash-fade-in {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        .animate-splash-fade-in {
+            animation: splash-fade-in 1s ease-in forwards;
+            animation-delay: 0.5s;
+        }
+
+        /* General UI animations from pennywise.html */
+        @keyframes fade-in {
+            0% { opacity: 0; transform: translateY(10px); }
             100% { opacity: 1; transform: translateY(0); }
         }
-
-        /* Parallax elements */
-        .parallax-element {
-            will-change: transform;
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            pointer-events: none;
-            opacity: 0;
-            animation: fadeInScale 2s ease-out forwards;
+        .animate-fade-in {
+            animation: fade-in 0.5s ease-out forwards;
         }
 
-        .parallax-element.layer-1 {
-            width: 100vmin;
-            height: 100vmin;
-            animation-delay: 0.2s;
-            z-index: 1;
-        }
-        .parallax-element.layer-2 {
-            width: 80vmin;
-            height: 80vmin;
-            animation-delay: 0.4s;
-            z-index: 2;
-        }
-        .parallax-element.layer-3 {
-            width: 60vmin;
-            height: 60vmin;
-            animation-delay: 0.6s;
-            z-index: 3;
+        /* Custom class to hide elements, from pennywise.html */
+        .app-hidden {
+            display: none !important;
         }
 
-        @keyframes fadeInScale {
-            from { opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
-            to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        /* Container styling adjusted for the new dark theme with gradient */
+        .container {
+            max-width: 960px;
+            margin: 2rem auto;
+            padding: 1.5rem;
+            background: linear-gradient(145deg, #2d3748, #1a202c); /* Subtle gradient for container */
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4); /* Stronger shadow */
+            border: 1px solid #4a5568;
         }
-
-        /* Main App Container */
-        #main-app {
-            min-height: 100vh;
-            padding: 2rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            opacity: 0; /* Start hidden */
-            transition: opacity 1s ease-in;
-        }
-
-        #main-app.show {
-            opacity: 1;
-        }
-
-        .glass-container {
-            background: var(--glass-bg-color);
-            backdrop-filter: blur(15px); /* Increased blur */
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid var(--glass-border-color);
-            border-radius: 20px;
-            box-shadow: 0 10px 40px 0 var(--glass-shadow-color); /* Stronger shadow */
-            padding: 2.5rem;
-            width: 100%;
-            max-width: 900px;
-            color: var(--text-color-light); /* Text color inside glass container, updated */
-            animation: slideInUp 0.8s ease-out forwards;
-            position: relative; /* For z-index of loading spinner */
-        }
-
-        @keyframes slideInUp {
-            from { opacity: 0; transform: translateY(50px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Form Elements */
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        label {
+        .input-group label {
             display: block;
             margin-bottom: 0.5rem;
             font-weight: 600;
-            color: var(--text-color-light); /* Light color for labels */
+            color: #a0aec0; /* Lighter gray for labels */
         }
-
-        textarea {
+        .input-group input, .input-group select {
             width: 100%;
             padding: 0.75rem 1rem;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            background-color: rgba(255, 255, 255, 0.15); /* Slightly more opaque */
-            color: white;
+            border: 1px solid #4a5568; /* Darker border */
+            border-radius: 8px;
             font-size: 1rem;
-            resize: vertical;
-            min-height: 100px;
-            transition: all 0.3s ease;
+            background-color: #1a202c; /* Even darker input background */
+            color: #e2e8f0; /* Light text in inputs */
+            transition: border-color 0.2s;
         }
-
-        textarea::placeholder {
-            color: rgba(255, 255, 255, 0.9); /* More visible placeholder, updated */
-        }
-
-        textarea:focus {
+        .input-group input:focus, .input-group select:focus {
             outline: none;
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 4px rgba(0, 219, 222, 0.5); /* Aqua shadow */
-            background-color: rgba(255, 255, 255, 0.25); /* Even more opaque on focus */
+            border-color: #6366f1; /* Indigo-500 */
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
         }
-
-        /* Buttons */
-        .btn {
-            padding: 0.8rem 1.8rem;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.75rem;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            border: none;
-        }
-
         .btn-primary {
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            background-color: #6366f1; /* Indigo-500 */
             color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background-color 0.2s, transform 0.1s;
+            box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
         }
-
         .btn-primary:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-            background: linear-gradient(45deg, #6A00CC, #D000E0); /* Darker shades on hover */
+            background-color: #4f46e5; /* Indigo-600 */
+            transform: translateY(-1px);
         }
-
         .btn-primary:active {
             transform: translateY(0);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: none;
         }
-
-        /* Tab Buttons */
-        .tab-button-group {
+        .transaction-item {
             display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .tab-button {
-            padding: 0.7rem 1.5rem;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 1rem;
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--text-color-light); /* Light color for tab buttons */
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
-            cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .tab-button:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        }
-
-        .tab-button.active {
-            background: linear-gradient(45deg, var(--accent-color), #00F2FE); /* Aqua to brighter Cyan */
-            border-color: var(--accent-color);
-            transform: scale(1.02);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            color: var(--text-color-dark); /* Dark text on bright active tab */
-        }
-
-
-        /* Loading Spinner */
-        .loading-overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border-radius: 20px;
-            z-index: 50;
-            color: white;
-            font-size: 1.2rem;
-            font-weight: 500;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-
-        .loading-overlay.show {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .spinner {
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-top: 4px solid white;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin-bottom: 1rem;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Results Section */
-        #aiResultsContainer, #famousCareersContainer { /* Apply to both result containers */
-            margin-top: 2rem;
-            width: 100%;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            animation: fadeIn 0.8s ease-out forwards;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .career-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(8px); /* Slightly more blur for cards */
-            -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.25); /* Stronger border */
-            border-radius: 15px;
-            padding: 1.5rem;
-            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3); /* Deeper shadow */
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            display: flex;
-            flex-direction: column;
             justify-content: space-between;
-            min-height: 200px; /* Ensure consistent card height */
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #4a5568; /* Darker border */
         }
-
-        .career-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+        .transaction-item:last-child {
+            border-bottom: none;
         }
-
-        .career-card h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.75rem;
-            font-weight: 700;
-            margin-bottom: 0.75rem;
-            color: #00FFD7; /* Bright Cyan for card titles */
-            text-shadow: 1px 1px 5px rgba(0,0,0,0.5); /* Stronger shadow */
+        .transaction-item .amount.income {
+            color: #34d399; /* Emerald-400 */
+            font-weight: 600;
         }
-
-        .career-card p {
+        .transaction-item .amount.expense {
+            color: #f87171; /* Red-400 */
+            font-weight: 600;
+        }
+        .advice-box {
+            background-color: #1f2937; /* Darker blue background */
+            border-left: 5px solid #60a5fa; /* Lighter blue border */
+            padding: 1rem;
+            border-radius: 8px;
+            color: #bfdbfe; /* Lighter blue text */
             font-size: 0.95rem;
             line-height: 1.5;
-            color: var(--text-color-light); /* Light text for card descriptions, updated */
-            margin-bottom: 1rem;
-            flex-grow: 1;
         }
-
-        .career-card .view-details-btn {
-            background: linear-gradient(45deg, #E100FF, #7F00FF); /* Neon Pink to Electric Violet */
-            color: white;
-            padding: 0.6rem 1.2rem;
+        .message-box {
+            background-color: #2d3748; /* Darker background */
+            border: 1px solid #4a5568;
             border-radius: 8px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            margin-top: 1rem; /* Space from description */
-            align-self: flex-end; /* Push to bottom right */
-        }
-
-        .career-card .view-details-btn:hover {
-            background: linear-gradient(45deg, #C000E0, #6A00CC); /* Darker shades on hover */
-            transform: translateY(-2px);
-        }
-
-        /* Modal Styles */
-        .modal-overlay {
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            padding: 20px;
             position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.8); /* Darker overlay */
-            backdrop-filter: blur(15px); /* Increased blur */
-            -webkit-backdrop-filter: blur(15px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-
-        .modal-overlay.show {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .modal-content {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(245, 245, 245, 0.98)); /* Very light, almost opaque */
-            border-radius: 20px;
-            padding: 2.5rem;
-            width: 90%;
-            max-width: 700px;
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5); /* Stronger shadow */
-            position: relative;
-            transform: scale(0.9);
-            opacity: 0;
-            transition: transform 0.3s ease, opacity 0.3s ease;
-            color: var(--text-color-dark); /* Dark text on light modal background */
-            max-height: 90vh; /* Limit height for scrollability */
-            overflow-y: auto; /* Enable scrolling for modal content */
-        }
-
-        .modal-overlay.show .modal-content {
-            transform: scale(1);
-            opacity: 1;
-        }
-
-        .modal-close-btn {
-            position: absolute;
-            top: 1.5rem;
-            right: 1.5rem;
-            background: none;
-            border: none;
-            font-size: 1.8rem;
-            color: #666;
-            cursor: pointer;
-            transition: color 0.2s ease;
-        }
-
-        .modal-close-btn:hover {
-            color: #333;
-        }
-
-        .modal-content h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.2rem;
-            font-weight: 900;
-            color: var(--primary-color); /* Electric Violet for modal titles */
-            margin-bottom: 1rem;
-        }
-
-        .modal-content p, .modal-content ul {
-            font-size: 1rem;
-            line-height: 1.6;
-            color: #555;
-            margin-bottom: 1rem;
-        }
-
-        .modal-content ul {
-            list-style: disc;
-            padding-left: 1.5rem;
-        }
-
-        .modal-content strong {
-            color: var(--secondary-color); /* Neon Pink for strong text in modal */
-        }
-
-        /* Popup Message Box */
-        #popup-container {
-            position: fixed;
-            bottom: 20px;
+            top: 50%;
             left: 50%;
-            transform: translateX(-50%);
-            z-index: 1001;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            text-align: center;
+            display: none; /* Hidden by default */
+            color: #e2e8f0;
         }
-
-        .popup-message {
-            background-color: #4CAF50; /* Green for success */
+        .message-box button {
+            background-color: #6366f1;
             color: white;
-            padding: 12px 25px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-            font-weight: 500;
-            transform: translateY(20px);
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
         }
-
-        .popup-message.show {
-            opacity: 1;
-            transform: translateY(0);
+        /* Specific styling for the forms and summary sections with gradients */
+        .form-gradient-indigo { /* Used for Income Form */
+            background: linear-gradient(145deg, #3f3c6e, #2a2a4a); /* Darker indigo gradient */
+            border: 1px solid #6366f1;
         }
-
-        .popup-message.error {
-            background-color: #F44336; /* Red for error */
+        .text-indigo-700 { /* Used for Income Form heading */
+            color: #a5b4fc; /* Lighter indigo text */
         }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .splash-title {
-                font-size: 3rem;
-            }
-            .splash-tagline {
-                font-size: 1.2rem;
-            }
-            .glass-container {
-                padding: 1.5rem;
-            }
-            .btn {
-                font-size: 1rem;
-                padding: 0.7rem 1.5rem;
-            }
-            .career-card h3 {
-                font-size: 1.5rem;
-            }
-            .modal-content {
-                padding: 1.5rem;
-            }
-            .modal-content h3 {
-                font-size: 1.8rem;
-            }
+        .form-gradient-red { /* Used for Expense Form */
+            background: linear-gradient(145deg, #452a2a, #2a1a1a); /* Darker red gradient */
+            border: 1px solid #ef4444;
+        }
+        .text-red-700 { /* Used for Expense Form heading */
+            color: #fca5a5; /* Lighter red text */
+        }
+        .section-gradient-gray { /* Used for Financial Summary, Transaction History, Category Breakdown sections */
+            background: linear-gradient(145deg, #2d3748, #1a202c); /* Darker gray gradient for sections */
+            border: 1px solid #4a5568;
+        }
+        .text-gray-700 { /* Used for section headings */
+            color: #a0aec0; /* Lighter gray text for headings */
+        }
+        .bg-green-100 { /* Used for Total Income summary box */
+            background-color: #10b981; /* Green for income */
+            color: white;
+        }
+        .text-green-700 { /* Used for Total Income label */
+            color: #d1fae5; /* Lighter green text */
+        }
+        .text-green-800 { /* Used for Total Income amount */
+            color: #ecfdf5; /* Even lighter green text */
+        }
+        .bg-red-100 { /* Used for Total Expenses summary box */
+            background-color: #ef4444; /* Red for expenses */
+            color: white;
+        }
+        .text-red-700 { /* Used for Total Expenses label */
+            color: #fee2e2; /* Lighter red text */
+        }
+        .text-red-800 {
+            color: #fef2f2; /* Even lighter red text */
+        }
+        .bg-blue-100 { /* Used for Balance summary box */
+            background-color: #60a5fa; /* Blue for balance */
+            color: white;
+        }
+        .text-blue-700 { /* Used for Balance label */
+            color: #eff6ff; /* Lighter blue text */
+        }
+        .text-blue-800 { /* Used for Balance amount */
+            color: #dbeafe; /* Even lighter blue text */
+        }
+        .text-gray-500 { /* Standard gray for sub-text (e.g., "No transactions yet.") */
+            color: #a0aec0;
+        }
+        .text-gray-100 { /* Standard light gray for main headings and amounts */
+            color: #e2e8f0;
+        }
+        h1, h2 {
+            font-family: 'Montserrat', sans-serif;
         }
     </style>
 </head>
-<body class="min-h-screen">
-    <!-- Splash Screen -->
-    <div id="splash-screen">
-        <!-- Parallax background elements -->
-        <div class="parallax-element layer-1" data-depth="0.1">
-            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="2">
-                <circle cx="100" cy="100" r="90"/>
-                <path d="M100 10 L190 100 L100 190 L10 100 Z"/>
-            </svg>
+<body>
+    <!-- Splash Screen - Copied directly from pennywise.html -->
+    <div id="splash-screen" class="fixed inset-0 bg-gradient-to-br from-indigo-900 to-blue-900 flex flex-col items-center justify-center text-white z-50 transition-opacity duration-700 ease-out opacity-100">
+        <div class="text-6xl md:text-8xl mb-6 text-yellow-400 animate-splash-pop-in">
+            <i class="fas fa-piggy-bank"></i>
         </div>
-        <div class="parallax-element layer-2" data-depth="0.2">
-            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="2">
-                <rect x="20" y="20" width="160" height="160" rx="20"/>
-                <line x1="20" y1="100" x2="180" y2="100"/>
-                <line x1="100" y1="20" x2="100" y2="180"/>
-            </svg>
-        </div>
-        <div class="parallax-element layer-3" data-depth="0.3">
-            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="2">
-                <polygon points="100,10 160,50 160,150 100,190 40,150 40,50"/>
-            </svg>
-        </div>
-
-        <h1 class="splash-title">Career Compass</h1>
-        <p class="splash-tagline">Navigate Your Future with AI</p>
+        <h1 class="text-7xl md:text-8xl font-extrabold mb-4 drop-shadow-lg tracking-wider animate-splash-pop-in font-montserrat" style="animation-delay: 0.2s;">
+            PennyWise
+        </h1>
+        <p class="text-3xl md:text-4xl font-semibold text-blue-200 animate-splash-fade-in font-inter" style="animation-delay: 0.7s;">
+            Smart Budget. Brighter Future.
+        </p>
     </div>
 
-    <!-- Main Application Container -->
-    <div id="main-app" class="hidden">
-        <div class="glass-container">
-            <h2 class="text-3xl md:text-4xl font-extrabold text-center mb-6 font-playfair-display text-white drop-shadow-lg">
-                Your AI Career Guide
-            </h2>
-            <p class="text-center text-lg mb-8 text-blue-100">
-                Explore career paths with AI or browse some popular options.
-            </p>
+    <!-- Main Application Content - Wrapped in app-root as per pennywise.html -->
+    <div id="app-root" class="min-h-screen bg-gray-900 text-gray-100 flex flex-col items-center p-4 relative overflow-x-hidden app-hidden">
+        <!-- Background subtle pattern/gradient from pennywise.html -->
+        <div class="absolute inset-0 bg-gradient-to-br from-gray-800 via-gray-900 to-gray-800 opacity-70 z-0"></div>
 
-            <div class="tab-button-group">
-                <button id="tabAiGuide" class="tab-button active">
-                    <i class="fas fa-brain mr-2"></i> AI Career Guide
-                </button>
-                <button id="tabFamousCareers" class="tab-button">
-                    <i class="fas fa-star mr-2"></i> Famous Careers
-                </button>
+        <!-- The original content of your finance advisor app now goes here -->
+        <div class="container relative z-10"> <!-- Added relative z-10 to ensure it's above the background -->
+            <h1 class="text-3xl font-bold text-center mb-8 text-gray-100 font-montserrat">Personal Finance Advisor</h1>
+
+            <!-- Income and Expense Input Forms -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <!-- Income Form -->
+                <div class="form-gradient-indigo p-6 rounded-xl shadow-md">
+                    <h2 class="text-xl font-semibold mb-4 text-indigo-700 font-montserrat">Add Income</h2>
+                    <form id="incomeForm" class="space-y-4">
+                        <div class="input-group">
+                            <label for="incomeDescription" class="font-inter">Description</label>
+                            <input type="text" id="incomeDescription" placeholder="e.g., Salary, Freelance" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="incomeAmount" class="font-inter">Amount</label>
+                            <input type="number" id="incomeAmount" placeholder="e.g., 2500" step="0.01" min="0" required>
+                        </div>
+                        <button type="submit" class="btn-primary w-full font-montserrat">Add Income</button>
+                    </form>
+                </div>
+
+                <!-- Expense Form -->
+                <div class="form-gradient-red p-6 rounded-xl shadow-md">
+                    <h2 class="text-xl font-semibold mb-4 text-red-700 font-montserrat">Add Expense</h2>
+                    <form id="expenseForm" class="space-y-4">
+                        <div class="input-group">
+                            <label for="expenseDescription" class="font-inter">Description</label>
+                            <input type="text" id="expenseDescription" placeholder="e.g., Groceries, Rent" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="expenseAmount" class="font-inter">Amount</label>
+                            <input type="number" id="expenseAmount" placeholder="e.g., 150" step="0.01" min="0" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="expenseCategory" class="font-inter">Category</label>
+                            <select id="expenseCategory" required>
+                                <option value="">Select a category</option>
+                                <option value="Food">Food</option>
+                                <option value="Housing">Housing</option>
+                                <option value="Transportation">Transportation</option>
+                                <option value="Entertainment">Entertainment</option>
+                                <option value="Utilities">Utilities</option>
+                                <option value="Shopping">Shopping</option>
+                                <option value="Health">Health</option>
+                                <option value="Education">Education</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn-primary w-full font-montserrat">Add Expense</button>
+                    </form>
+                </div>
             </div>
 
-            <!-- AI Career Guide Tab Content -->
-            <div id="aiGuideContent" class="tab-content">
-                <div class="form-group">
-                    <label for="userInput">Describe your interests, skills, education, and what you're looking for:</label>
-                    <textarea
-                        id="userInput"
-                        placeholder="E.g., 'I enjoy problem-solving, have strong analytical skills, a degree in computer science, and am interested in tech roles. I want a career with good growth potential.' Or 'I love helping people, have good communication skills, and a high school diploma. I'm looking for a job that makes a difference.'"
-                    ></textarea>
+            <!-- Financial Summary -->
+            <div class="section-gradient-gray p-6 rounded-xl shadow-md mb-8">
+                <h2 class="text-xl font-semibold mb-4 text-gray-700 font-montserrat">Financial Summary</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+                    <div class="p-3 bg-green-100 rounded-lg">
+                        <p class="text-sm text-green-700 font-inter">Total Income</p>
+                        <p id="totalIncome" class="text-2xl font-bold text-green-800 font-montserrat">$0.00</p>
+                    </div>
+                    <div class="p-3 bg-red-100 rounded-lg">
+                        <p class="text-sm text-red-700 font-inter">Total Expenses</p>
+                        <p id="totalExpenses" class="text-2xl font-bold text-red-800 font-montserrat">$0.00</p>
+                    </div>
+                    <div class="p-3 bg-blue-100 rounded-lg">
+                        <p class="text-sm text-blue-700 font-inter">Balance</p>
+                        <p id="balance" class="text-2xl font-bold text-blue-800 font-montserrat">$0.00</p>
+                    </div>
                 </div>
-
-                <div class="text-center">
-                    <button id="recommendButton" class="btn btn-primary">
-                        <i class="fas fa-robot"></i> Get Career Recommendations
-                    </button>
-                </div>
-
-                <div id="loading-overlay" class="loading-overlay">
-                    <div class="spinner"></div>
-                    <p>Generating recommendations...</p>
-                </div>
-
-                <div id="aiResultsContainer" class="mt-8 w-full max-w-7xl">
-                    <!-- AI-generated career cards will be rendered here -->
+                <div class="mt-6 advice-box" id="financialAdvice">
+                    <p class="font-inter">Add some income and expenses to get personalized financial advice!</p>
                 </div>
             </div>
 
-            <!-- Famous Careers Tab Content -->
-            <div id="famousCareersContent" class="tab-content hidden">
-                <h3 class="text-2xl md:text-3xl font-extrabold text-center mb-6 font-playfair-display text-white drop-shadow-lg">
-                    Popular Career Paths
-                </h3>
-                <p class="text-center text-lg mb-8 text-blue-100">
-                    Explore some commonly sought-after and impactful careers.
-                </p>
-                <div id="famousCareersContainer" class="mt-8 w-full max-w-7xl grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
-                    <!-- Famous career cards will be rendered here -->
+            <!-- Transaction History -->
+            <div class="section-gradient-gray p-6 rounded-xl shadow-md mb-8">
+                <h2 class="text-xl font-semibold mb-4 text-gray-700 font-montserrat">Transaction History</h2>
+                <div id="transactionList" class="space-y-2">
+                    <!-- Transactions will be dynamically added here -->
+                    <p class="text-gray-500 text-center font-inter" id="noTransactionsMessage">No transactions yet.</p>
+                </div>
+            </div>
+
+            <!-- Category Spending Breakdown (Simple Text-based) -->
+            <div class="section-gradient-gray p-6 rounded-xl shadow-md">
+                <h2 class="text-xl font-semibold mb-4 text-gray-700 font-montserrat">Spending Breakdown by Category</h2>
+                <div id="categoryBreakdown" class="space-y-2">
+                    <p class="text-gray-500 text-center font-inter" id="noCategoriesMessage">No expenses to categorize yet.</p>
+                    <!-- Category breakdown will be dynamically added here -->
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal for Career Details -->
-    <div id="careerDetailModal" class="modal-overlay">
-        <div class="modal-content">
-            <button class="modal-close-btn" id="modalCloseButton">&times;</button>
-            <h3 id="modalCareerName"></h3>
-            <p><strong>Description:</strong> <span id="modalDescription"></span></p>
-            <p><strong>Key Skills:</strong> <ul id="modalKeySkills" class="list-disc list-inside"></ul></p>
-            <p><strong>Education Required:</strong> <span id="modalEducationRequired"></span></p>
-            <p><strong>Job Outlook:</strong> <span id="modalJobOutlook"></span></p>
-        </div>
+    <!-- Custom Message Box -->
+    <div id="messageBox" class="message-box">
+        <p id="messageText" class="font-inter"></p>
+        <button onclick="hideMessageBox()" class="font-montserrat">OK</button>
     </div>
-
-    <!-- Popup Message Container -->
-    <div id="popup-container"></div>
 
     <script>
-        // Global variables for app state
-        let userInput = '';
-        let recommendedCareers = []; // For AI-generated careers
-        let selectedCareer = null;
-        let isLoading = false;
-        let currentView = 'ai-guide'; // 'ai-guide' or 'famous-careers'
+        // Array to store all transactions
+        let transactions = [];
 
-        // API Key for Gemini API (leave empty, Canvas will provide)
-        const API_KEY = "";
+        // Get DOM elements
+        const incomeForm = document.getElementById('incomeForm');
+        const expenseForm = document.getElementById('expenseForm');
+        const totalIncomeEl = document.getElementById('totalIncome');
+        const totalExpensesEl = document.getElementById('totalExpenses');
+        const balanceEl = document.getElementById('balance');
+        const transactionListEl = document.getElementById('transactionList');
+        const noTransactionsMessage = document.getElementById('noTransactionsMessage');
+        const financialAdviceEl = document.getElementById('financialAdvice');
+        const categoryBreakdownEl = document.getElementById('categoryBreakdown');
+        const noCategoriesMessage = document.getElementById('noCategoriesMessage');
+        const messageBox = document.getElementById('messageBox');
+        const messageText = document.getElementById('messageText');
 
-        // --- Famous Careers Data ---
-        const famousCareersData = [
-            {
-                careerName: "Software Engineer",
-                description: "Designs, develops, and maintains software applications. Involves coding, testing, and debugging to create functional and efficient programs.",
-                keySkills: ["Programming (Python, Java, C++)", "Problem-solving", "Data Structures & Algorithms", "Version Control (Git)", "Debugging"],
-                educationRequired: "Bachelor's Degree in Computer Science or related field",
-                jobOutlook: "Excellent"
-            },
-            {
-                careerName: "Data Scientist",
-                description: "Analyzes complex data to extract insights and knowledge. Uses statistical methods, machine learning, and programming to solve business problems and predict trends.",
-                keySkills: ["Statistical Analysis", "Machine Learning", "Python/R", "SQL", "Data Visualization"],
-                educationRequired: "Master's Degree in Data Science, Statistics, or Computer Science",
-                jobOutlook: "Excellent"
-            },
-            {
-                careerName: "Digital Marketing Specialist",
-                description: "Develops and implements online marketing strategies to promote products or services. Focuses on SEO, social media, content marketing, and analytics.",
-                keySkills: ["SEO/SEM", "Content Marketing", "Social Media Management", "Analytics", "Communication"],
-                educationRequired: "Bachelor's Degree in Marketing, Communications, or related field",
-                jobOutlook: "Good"
-            },
-            {
-                careerName: "Registered Nurse (RN)",
-                description: "Provides direct patient care, administers medications, educates patients and families, and collaborates with healthcare teams. Works in hospitals, clinics, and other healthcare settings.",
-                keySkills: ["Patient Care", "Critical Thinking", "Communication", "Empathy", "Medical Knowledge"],
-                educationRequired: "Associate's Degree in Nursing (ADN) or Bachelor of Science in Nursing (BSN)",
-                jobOutlook: "Excellent"
-            },
-            {
-                careerName: "Graphic Designer",
-                description: "Creates visual concepts using computer software or by hand, to communicate ideas that inspire, inform, or captivate consumers. Works on logos, websites, advertisements, and more.",
-                keySkills: ["Adobe Creative Suite", "Typography", "Color Theory", "Creativity", "Attention to Detail"],
-                educationRequired: "Bachelor's Degree in Graphic Design or related field",
-                jobOutlook: "Average"
-            },
-            {
-                careerName: "Financial Analyst",
-                description: "Evaluates financial data to help businesses make informed decisions. Conducts research, analyzes trends, and prepares reports on investments and financial performance.",
-                keySkills: ["Financial Modeling", "Data Analysis", "Excel", "Communication", "Attention to Detail"],
-                educationRequired: "Bachelor's Degree in Finance, Economics, or Accounting",
-                jobOutlook: "Good"
-            }
-        ];
-
-
-        // --- DOM Elements (cached for efficiency) ---
+        // New DOM elements for splash screen and app root
         const splashScreen = document.getElementById('splash-screen');
-        const mainApp = document.getElementById('main-app');
-        const userInputTextarea = document.getElementById('userInput');
-        const recommendButton = document.getElementById('recommendButton');
-        const loadingOverlay = document.getElementById('loading-overlay');
-        const aiResultsContainer = document.getElementById('aiResultsContainer'); // Specific for AI results
-        const famousCareersContainer = document.getElementById('famousCareersContainer'); // Specific for Famous Careers
-        const careerDetailModal = document.getElementById('careerDetailModal');
-        const modalCloseButton = document.getElementById('modalCloseButton');
-        const modalCareerName = document.getElementById('modalCareerName');
-        const modalDescription = document.getElementById('modalDescription');
-        const modalKeySkills = document.getElementById('modalKeySkills');
-        const modalEducationRequired = document.getElementById('modalEducationRequired');
-        const modalJobOutlook = document.getElementById('modalJobOutlook');
-        const popupContainer = document.getElementById('popup-container');
+        const appRoot = document.getElementById('app-root');
 
-        // Tab buttons and content containers
-        const tabAiGuide = document.getElementById('tabAiGuide');
-        const tabFamousCareers = document.getElementById('tabFamousCareers');
-        const aiGuideContent = document.getElementById('aiGuideContent');
-        const famousCareersContent = document.getElementById('famousCareersContent');
-
-        // Parallax elements
-        const parallaxElements = document.querySelectorAll('.parallax-element');
-
-        // --- Utility Functions ---
-
-        /**
-         * Displays a temporary popup message (success or error).
-         * @param {string} message - The message to display.
-         * @param {'success'|'error'} type - The type of message (determines color).
-         * @param {number} duration - How long the message should be visible in milliseconds.
-         */
-        function showPopupMessage(message, type = 'success', duration = 3000) {
-            const popup = document.createElement('div');
-            popup.className = `popup-message ${type}`;
-            popupContainer.appendChild(popup);
-
-            // Trigger reflow to ensure transition plays
-            void popup.offsetWidth;
-            popup.classList.add('show');
-
-            setTimeout(() => {
-                popup.classList.remove('show');
-                popup.addEventListener('transitionend', () => popup.remove(), { once: true });
-            }, duration);
+        // Function to show custom message box
+        function showMessageBox(message) {
+            messageText.textContent = message;
+            messageBox.style.display = 'block';
         }
 
-        /**
-         * Shows or hides the loading overlay.
-         * @param {boolean} show - True to show, false to hide.
-         */
-        function toggleLoading(show) {
-            isLoading = show;
-            if (show) {
-                loadingOverlay.classList.add('show');
-            } else {
-                loadingOverlay.classList.remove('show');
-            }
-            recommendButton.disabled = show;
-            userInputTextarea.disabled = show;
+        // Function to hide custom message box
+        function hideMessageBox() {
+            messageBox.style.display = 'none';
         }
 
-        // --- Parallax Scrolling Logic ---
-        let ticking = false;
+        // Function to update the financial summary
+        function updateSummary() {
+            let totalIncome = 0;
+            let totalExpenses = 0;
+            const categorySpending = {}; // Object to store spending per category
 
-        /**
-         * Updates the position of parallax elements based on scroll.
-         */
-        function updateParallax() {
-            const scrolled = window.pageYOffset;
-
-            parallaxElements.forEach(element => {
-                const depth = parseFloat(element.dataset.depth);
-                const translateY = -scrolled * depth;
-                element.style.transform = `translate(-50%, -50%) translateY(${translateY}px)`;
-            });
-
-            ticking = false;
-        }
-
-        /**
-         * Initializes the parallax effect by adding a scroll listener.
-         */
-        function initParallax() {
-            window.addEventListener('scroll', () => {
-                if (!ticking) {
-                    window.requestAnimationFrame(updateParallax);
-                    ticking = true;
+            // Calculate totals and category spending
+            transactions.forEach(transaction => {
+                if (transaction.type === 'income') {
+                    totalIncome += transaction.amount;
+                } else {
+                    totalExpenses += transaction.amount;
+                    // Aggregate spending by category
+                    if (categorySpending[transaction.category]) {
+                        categorySpending[transaction.category] += transaction.amount;
+                    } else {
+                        categorySpending[transaction.category] = transaction.amount;
+                    }
                 }
             });
-            // Initial call to set positions
-            updateParallax();
+
+            const balance = totalIncome - totalExpenses;
+
+            // Update DOM elements
+            totalIncomeEl.textContent = `$${totalIncome.toFixed(2)}`;
+            totalExpensesEl.textContent = `$${totalExpenses.toFixed(2)}`;
+            balanceEl.textContent = `$${balance.toFixed(2)}`;
+
+            // Update transaction list
+            renderTransactions();
+
+            // Update financial advice
+            generateFinancialAdvice(totalIncome, totalExpenses, balance, categorySpending);
+
+            // Update category breakdown
+            renderCategoryBreakdown(categorySpending);
         }
 
-        // --- AI Integration (Gemini API Call) ---
+        // Function to render transactions in the list
+        function renderTransactions() {
+            transactionListEl.innerHTML = ''; // Clear existing list
 
-        /**
-         * Fetches career recommendations from the Gemini API based on user input.
-         * @param {string} input - The user's description of interests, skills, etc.
-         * @returns {Promise<Array<Object>>} A promise that resolves to an array of career objects.
-         */
-        async function getCareerRecommendations(input) {
-            toggleLoading(true);
-            try {
-                const chatHistory = [];
-                const prompt = `Based on the following user input: "${input}", recommend 3-5 potential career paths. For each career, provide a brief description, 3-5 key skills, required education (e.g., "Bachelor's Degree", "High School Diploma", "Master's Degree"), and a general job outlook (e.g., "Excellent", "Good", "Average", "Limited"). Make sure the key skills are concise and directly related to the career.`;
+            if (transactions.length === 0) {
+                noTransactionsMessage.style.display = 'block';
+            } else {
+                noTransactionsMessage.style.display = 'none';
+                // Sort transactions by date (most recent first)
+                const sortedTransactions = [...transactions].sort((a, b) => new Date(b.date) - new Date(a.date));
 
-                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                sortedTransactions.forEach((transaction, index) => {
+                    const transactionItem = document.createElement('div');
+                    transactionItem.classList.add('transaction-item');
+                    transactionItem.innerHTML = `
+                        <div>
+                            <p class="font-medium font-inter">${transaction.description}</p>
+                            <p class="text-sm text-gray-500 font-inter">${new Date(transaction.date).toLocaleDateString()}</p>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="amount ${transaction.type} font-montserrat">${transaction.type === 'income' ? '+' : '-'}$${transaction.amount.toFixed(2)}</span>
+                            <button data-index="${index}" class="text-red-500 hover:text-red-700 text-sm delete-btn font-inter">Delete</button>
+                        </div>
+                    `;
+                    transactionListEl.appendChild(transactionItem);
+                });
 
-                const payload = {
-                    contents: chatHistory,
-                    generationConfig: {
-                        responseMimeType: "application/json",
-                        responseSchema: {
-                            type: "ARRAY",
-                            items: {
-                                type: "OBJECT",
-                                properties: {
-                                    "careerName": { "type": "STRING" },
-                                    "description": { "type": "STRING" },
-                                    "keySkills": {
-                                        "type": "ARRAY",
-                                        "items": { "type": "STRING" }
-                                    },
-                                    "educationRequired": { "type": "STRING" },
-                                    "jobOutlook": { "type": "STRING" }
-                                },
-                                "propertyOrdering": ["careerName", "description", "keySkills", "educationRequired", "jobOutlook"]
-                            }
+                // Add event listeners for delete buttons
+                document.querySelectorAll('.delete-btn').forEach(button => {
+                    button.addEventListener('click', (event) => {
+                        // Find the original index of the transaction in the `transactions` array
+                        // by matching description, amount, type, and date.
+                        const clickedIndex = parseInt(event.target.dataset.index);
+                        const transactionToDelete = sortedTransactions[clickedIndex];
+                        const originalIndex = transactions.findIndex(t =>
+                            t.description === transactionToDelete.description &&
+                            t.amount === transactionToDelete.amount &&
+                            t.type === transactionToDelete.type &&
+                            new Date(t.date).getTime() === new Date(transactionToDelete.date).getTime()
+                        );
+
+                        if (originalIndex > -1) {
+                            transactions.splice(originalIndex, 1);
+                            updateSummary(); // Re-render and update summary after deletion
                         }
-                    }
-                };
+                    });
+                });
+            }
+        }
 
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
+
+        // Function to generate financial advice using a simple rule-based system
+        async function generateFinancialAdvice(income, expenses, balance, categorySpending) {
+            let advice = "";
+
+            if (transactions.length === 0) {
+                advice = "Start by adding your income and expenses to get personalized financial advice!";
+            } else if (balance < 0) {
+                advice = "Your expenses are exceeding your income. It's crucial to review your spending and find areas to cut back. Consider creating a strict budget.";
+            } else if (balance === 0) {
+                advice = "You're breaking even. While not losing money, aim to save a portion of your income for future goals and emergencies.";
+            } else if (balance > 0 && income > 0 && balance < income * 0.1) { // If balance is less than 10% of income
+                advice = "You have a positive balance, which is great! Try to increase your savings. A good goal is to save at least 10-20% of your income.";
+            } else if (balance >= income * 0.1) {
+                advice = "Excellent! You're managing your finances well and saving a good portion of your income. Keep up the great work!";
+            }
+
+            // Add advice based on spending categories if there are expenses
+            if (expenses > 0) {
+                const sortedCategories = Object.entries(categorySpending).sort(([, a], [, b]) => b - a);
+                if (sortedCategories.length > 0) {
+                    const [topCategory, topAmount] = sortedCategories[0];
+                    const topCategoryPercentage = (topAmount / expenses) * 100;
+
+                    if (topCategoryPercentage > 30) {
+                        advice += `<br><br>Your highest spending category is **${topCategory}** (${topAmount.toFixed(2)}), accounting for ${topCategoryPercentage.toFixed(1)}% of your total expenses. This might be an area to review for potential savings.`;
+                    }
+                }
+            }
+
+            // Use the Gemini API for more dynamic advice (optional, but good for AI/ML aspect)
+            const prompt = `Given the following financial summary: Total Income: $${income.toFixed(2)}, Total Expenses: $${expenses.toFixed(2)}, Balance: $${balance.toFixed(2)}. Category spending: ${JSON.stringify(categorySpending)}. Provide concise, actionable financial advice. Focus on budgeting, saving, or identifying areas for improvement.`;
+
+            try {
+                let chatHistory = [];
+                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                const payload = { contents: chatHistory };
+                const apiKey = ""; // Canvas will provide this
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
                 const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
-
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    console.error("API Error Response:", errorData);
-                    throw new Error(`API request failed with status ${response.status}: ${errorData.error.message || 'Unknown error'}`);
-                }
-
                 const result = await response.json();
+
                 if (result.candidates && result.candidates.length > 0 &&
                     result.candidates[0].content && result.candidates[0].content.parts &&
                     result.candidates[0].content.parts.length > 0) {
-                    const jsonString = result.candidates[0].content.parts[0].text;
-                    const parsedJson = JSON.parse(jsonString);
-                    return parsedJson;
+                    const aiAdvice = result.candidates[0].content.parts[0].text;
+                    financialAdviceEl.innerHTML = `<strong>AI Financial Insight:</strong> <span class="font-inter">${aiAdvice}</span>`;
                 } else {
-                    throw new Error("Invalid response structure from AI model.");
+                    financialAdviceEl.innerHTML = `<strong>Financial Advice:</strong> <span class="font-inter">${advice}</span>`; // Fallback to rule-based
+                    console.error("Gemini API did not return valid content.");
                 }
             } catch (error) {
-                console.error("Error getting career recommendations:", error);
-                showPopupMessage(`Failed to get recommendations: ${error.message}. Please try again.`, 'error');
-                return [];
-            } finally {
-                toggleLoading(false);
+                financialAdviceEl.innerHTML = `<strong>Financial Advice:</strong> <span class="font-inter">${advice}</span>`; // Fallback to rule-based
+                console.error("Error calling Gemini API:", error);
             }
         }
 
-        // --- UI Rendering Functions ---
+        // Function to render spending breakdown by category
+        function renderCategoryBreakdown(categorySpending) {
+            categoryBreakdownEl.innerHTML = ''; // Clear existing breakdown
 
-        /**
-         * Creates a single career card HTML element.
-         * @param {Object} career - The career object.
-         * @returns {HTMLElement} The created div element for the career card.
-         */
-        function createCareerCard(career) {
-            const card = document.createElement('div');
-            card.className = 'career-card';
-            card.innerHTML = `
-                <h3>${career.careerName}</h3>
-                <p>${career.description}</p>
-                <button class="btn view-details-btn" data-career-name="${career.careerName}">
-                    View Details <i class="fas fa-arrow-right ml-2"></i>
-                </button>
-            `;
-            // Attach event listener to the "View Details" button
-            card.querySelector('.view-details-btn').addEventListener('click', () => {
-                openCareerDetailModal(career); // Pass the full career object
-            });
-            return card;
-        }
+            const categories = Object.keys(categorySpending);
+            if (categories.length === 0) {
+                noCategoriesMessage.style.display = 'block';
+            } else {
+                noCategoriesMessage.style.display = 'none';
+                // Sort categories by amount spent (highest first)
+                const sortedCategories = Object.entries(categorySpending).sort(([, a], [, b]) => b - a);
 
-        /**
-         * Renders the recommended career cards in the AI results container.
-         * @param {Array<Object>} careers - An array of career objects.
-         */
-        function renderAiCareerCards(careers) {
-            aiResultsContainer.innerHTML = ''; // Clear previous results
-            if (careers.length === 0) {
-                aiResultsContainer.innerHTML = `
-                    <p class="text-center text-white/80 text-lg col-span-full">
-                        No AI recommendations found. Please try again with different input.
-                    </p>
-                `;
-                return;
-            }
-
-            careers.forEach(career => {
-                aiResultsContainer.appendChild(createCareerCard(career));
-            });
-        }
-
-        /**
-         * Renders the famous career cards in the famous careers container.
-         */
-        function renderFamousCareersSection() {
-            famousCareersContainer.innerHTML = ''; // Clear previous results
-            famousCareersData.forEach(career => {
-                famousCareersContainer.appendChild(createCareerCard(career));
-            });
-        }
-
-        /**
-         * Opens the modal with detailed information about a selected career.
-         * @param {Object} career - The career object to display.
-         */
-        function openCareerDetailModal(career) {
-            selectedCareer = career;
-            modalCareerName.textContent = career.careerName;
-            modalDescription.textContent = career.description;
-
-            modalKeySkills.innerHTML = '';
-            if (career.keySkills && career.keySkills.length > 0) {
-                career.keySkills.forEach(skill => {
-                    const li = document.createElement('li');
-                    li.textContent = skill;
-                    modalKeySkills.appendChild(li);
+                sortedCategories.forEach(([category, amount]) => {
+                    const categoryItem = document.createElement('div');
+                    categoryItem.classList.add('flex', 'justify-between', 'items-center', 'py-1');
+                    categoryItem.innerHTML = `
+                        <span class="font-medium text-gray-300 font-inter">${category}</span>
+                        <span class="text-gray-100 font-montserrat">$${amount.toFixed(2)}</span>
+                    `;
+                    categoryBreakdownEl.appendChild(categoryItem);
                 });
-            } else {
-                modalKeySkills.innerHTML = '<li>N/A</li>';
-            }
-
-            modalEducationRequired.textContent = career.educationRequired || 'N/A';
-            modalJobOutlook.textContent = career.jobOutlook || 'N/A';
-
-            careerDetailModal.classList.add('show');
-            document.body.style.overflow = 'hidden'; // Prevent scrolling background
-        }
-
-        /**
-         * Closes the career detail modal.
-         */
-        function closeCareerDetailModal() {
-            selectedCareer = null;
-            careerDetailModal.classList.remove('show');
-            document.body.style.overflow = 'auto'; // Re-enable scrolling
-        }
-
-        /**
-         * Manages which tab content is visible.
-         * @param {string} view - The view to show ('ai-guide' or 'famous-careers').
-         */
-        function showView(view) {
-            currentView = view;
-
-            // Update tab button active states
-            tabAiGuide.classList.remove('active');
-            tabFamousCareers.classList.remove('active');
-            if (currentView === 'ai-guide') {
-                tabAiGuide.classList.add('active');
-            } else {
-                tabFamousCareers.classList.add('active');
-            }
-
-            // Toggle content visibility
-            aiGuideContent.classList.add('hidden');
-            famousCareersContent.classList.add('hidden');
-
-            if (currentView === 'ai-guide') {
-                aiGuideContent.classList.remove('hidden');
-                // If AI results were previously generated, re-render them
-                if (recommendedCareers.length > 0) {
-                    renderAiCareerCards(recommendedCareers);
-                } else {
-                    aiResultsContainer.innerHTML = ''; // Clear if no results
-                }
-            } else {
-                famousCareersContent.classList.remove('hidden');
-                renderFamousCareersSection(); // Render famous careers when tab is active
             }
         }
 
+        // Event listener for income form submission
+        incomeForm.addEventListener('submit', (e) => {
+            e.preventDefault(); // Prevent default form submission
 
-        // --- Event Listeners ---
+            const description = document.getElementById('incomeDescription').value;
+            const amount = parseFloat(document.getElementById('incomeAmount').value);
 
-        // Handle recommendation button click
-        recommendButton.addEventListener('click', async () => {
-            userInput = userInputTextarea.value.trim();
-            if (userInput === '') {
-                showPopupMessage('Please describe your interests, skills, and education to get recommendations.', 'error');
-                return;
-            }
-            recommendedCareers = await getCareerRecommendations(userInput);
-            renderAiCareerCards(recommendedCareers); // Render AI results
-        });
-
-        // Handle modal close button click
-        modalCloseButton.addEventListener('click', closeCareerDetailModal);
-
-        // Close modal when clicking outside the content
-        careerDetailModal.addEventListener('click', (e) => {
-            if (e.target === careerDetailModal) {
-                closeCareerDetailModal();
+            if (description && !isNaN(amount) && amount > 0) {
+                transactions.push({
+                    type: 'income',
+                    description,
+                    amount,
+                    date: new Date().toISOString() // Store date as ISO string
+                });
+                incomeForm.reset(); // Clear form fields
+                updateSummary(); // Update summary and lists
+            } else {
+                showMessageBox('Please enter a valid description and a positive amount for income.');
             }
         });
 
-        // Tab button listeners
-        tabAiGuide.addEventListener('click', () => showView('ai-guide'));
-        tabFamousCareers.addEventListener('click', () => showView('famous-careers'));
+        // Event listener for expense form submission
+        expenseForm.addEventListener('submit', (e) => {
+            e.preventDefault(); // Prevent default form submission
 
+            const description = document.getElementById('expenseDescription').value;
+            const amount = parseFloat(document.getElementById('expenseAmount').value);
+            const category = document.getElementById('expenseCategory').value;
 
-        // --- Initial Application Load ---
-        window.onload = () => {
-            // Pre-fill the user input textarea
-            userInputTextarea.value = "I am interested in technology, have strong programming skills, and a Bachelor's degree in Computer Science. I'm looking for a challenging role with good career progression.";
+            if (description && !isNaN(amount) && amount > 0 && category) {
+                transactions.push({
+                    type: 'expense',
+                    description,
+                    amount,
+                    category,
+                    date: new Date().toISOString() // Store date as ISO string
+                });
+                expenseForm.reset(); // Clear form fields
+                updateSummary(); // Update summary and lists
+            } else {
+                showMessageBox('Please fill in all fields (description, amount, and category) with valid values for expense.');
+            }
+        });
 
-            // Show splash screen initially
-            splashScreen.style.display = 'flex';
-            document.body.style.overflow = 'hidden'; // Prevent scrolling during splash
+        // Initial setup for splash screen and app display
+        document.addEventListener('DOMContentLoaded', () => {
+            // Define splash screen transition duration from CSS for accurate timing
+            const splashTransitionDuration = parseFloat(getComputedStyle(splashScreen).transitionDuration) * 1000; // Convert to milliseconds
 
-            // Initialize parallax for splash screen
-            initParallax();
-
-            // After a delay, fade out splash screen and reveal main app
+            // Hide splash screen after its animations
             setTimeout(() => {
-                splashScreen.classList.add('fade-out');
-                splashScreen.addEventListener('transitionend', () => {
-                    splashScreen.style.display = 'none';
-                    mainApp.classList.remove('hidden'); // Show main app
-                    mainApp.classList.add('show'); // Trigger fade-in animation
+                splashScreen.classList.add('opacity-0');
+                splashScreen.style.pointerEvents = 'none'; // Disable interactions immediately
+
+                setTimeout(() => {
+                    splashScreen.style.display = 'none'; // Hide completely
+                    appRoot.classList.remove('app-hidden'); // Show app-root
                     document.body.style.overflow = 'auto'; // Re-enable scrolling
-                    userInputTextarea.focus(); // Focus on input field
-                    showView('ai-guide'); // Show AI Guide tab by default
-                }, { once: true });
-            }, 4000); // Display splash for 4 seconds
-        };
+                    updateSummary(); // Initial update of financial data once app is visible
+                }, splashTransitionDuration); // Wait for splash fade-out transition
+            }, 3000); // Display splash for 3 seconds initially
+        });
     </script>
 </body>
 </html>
